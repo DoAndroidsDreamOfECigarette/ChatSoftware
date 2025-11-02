@@ -35,9 +35,11 @@ void Login::login(){
     QString username=this->username->text();
     QString password=this->password->text();
     if(true){
-        static MainWindow m;
+        MainWindow *m=MainWindow::getInstance();
         this->destroy();
-        m.show();
+        connect(this,&Login::userInit,m,&MainWindow::userInit);
+        emit userInit(1, username);
+        m->show();
     }else {
         QMessageBox::information(this,"登录失败","账号或密码错误");
     }

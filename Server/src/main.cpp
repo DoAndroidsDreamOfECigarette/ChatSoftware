@@ -3,6 +3,7 @@
 #include <memory>
 #include <qobject.h>
 #include <QThread>
+#include <qtcpserver.h>
 #include <qthread.h>
 
 
@@ -11,8 +12,7 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
-    TcpServer *m_server=new TcpServer();
-    m_server->run();
+    auto m_server=std::make_unique<TcpServer>();
 
     return app.exec();
 }

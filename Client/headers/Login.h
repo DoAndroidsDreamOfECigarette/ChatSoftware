@@ -3,6 +3,7 @@
 #include <qboxlayout.h>
 #include <qlineedit.h>
 #include <qmainwindow.h>
+#include <qobject.h>
 #include <qplaintextedit.h>
 #include <qpushbutton.h>
 #include <qtmetamacros.h>
@@ -24,6 +25,9 @@ class Login:public QWidget{
     QLineEdit *password=new QLineEdit(this);
     QPushButton *loginBtn=new QPushButton("登录",this);
     QPushButton *quitBtn=new QPushButton("退出",this);
+
+    signals:
+    void userInit(int,QString);
 
     private slots:
     void login();
