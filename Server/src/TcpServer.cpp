@@ -1,6 +1,5 @@
 #pragma once
 #include "TcpServer.h"
-#include <cstddef>
 #include <qhash.h>
 #include <qhostaddress.h>
 #include <qobject.h>

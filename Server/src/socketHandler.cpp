@@ -29,7 +29,6 @@ void socketHandler::run(){
             QString username=mes[1];
             mes.remove(0,2);
             QByteArray realmessage=mes.join(':');
-            // TcpServer::userSockets.value(username,nullptr)->write(realmessage);
             emit transmitMessage(username,realmessage);
         }
     });

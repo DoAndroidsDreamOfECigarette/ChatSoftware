@@ -33,3 +33,12 @@ QList<QListWidgetItem*> Friends::getAllFriends(){
     }
     return *allFriends;
 }
+
+QListWidgetItem* Friends::getFriendbyId(QString username){
+    for(int i = 0; i <friendsList->count() ;i++){
+        if(friendsList->item(i)->data(FriendUsername).toString() == username){
+            return friendsList->item(i);
+        }
+    }
+    return nullptr;
+}

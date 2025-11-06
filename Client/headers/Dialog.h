@@ -1,6 +1,7 @@
 #pragma once
 #include "TextArea.h"
 #include <qboxlayout.h>
+#include <qcontainerfwd.h>
 #include <qlistwidget.h>
 #include <qsplitter.h>
 #include <qtcpsocket.h>
@@ -20,6 +21,10 @@ class Dialog:public QWidget{
     TextArea *textArea=new TextArea(splitter);
     QListWidget *talkDialog=new QListWidget(splitter);
     QTcpSocket *m_socket=new QTcpSocket(this);
+
+    signals:
+    void transmitMessages(QString fromUsername,QByteArray realMessage);
+    void showMessage(QString message);
 
     private slots:
     void showMessages(QString message);

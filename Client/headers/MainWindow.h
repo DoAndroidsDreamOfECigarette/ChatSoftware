@@ -11,6 +11,7 @@
 #include <qpushbutton.h>
 #include <qsplitter.h>
 #include <qstackedwidget.h>
+#include <qstringview.h>
 #include <qtextcursor.h>
 #include <qtextedit.h>
 #include <qtmetamacros.h>
@@ -46,4 +47,5 @@ class MainWindow:public QWidget{
     public slots:
     void userInit(int id,QString username);
     void showDialog(QListWidgetItem* item);
+    void transmitMessage(QString username,QByteArray message);
 };

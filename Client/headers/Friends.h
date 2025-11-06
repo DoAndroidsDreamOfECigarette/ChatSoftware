@@ -1,5 +1,6 @@
 #pragma once
 #include <qboxlayout.h>
+#include <qcontainerfwd.h>
 #include <qlist.h>
 #include <qlistwidget.h>
 #include <qobject.h>
@@ -15,6 +16,7 @@ class Friends:public QWidget{
     ~Friends();
     QString getSelectedFriendUsername();
     QListWidgetItem* getSelectedFriend();
+    QListWidgetItem* getFriendbyId(QString username);
     QList<QListWidgetItem*> getAllFriends();
 
     private:
