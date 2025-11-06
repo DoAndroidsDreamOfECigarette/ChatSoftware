@@ -33,12 +33,13 @@ Login::Login(QWidget *parent):QWidget(parent){
 
 void Login::login(){
     QString username=this->username->text();
-    QString password=this->password->text();
+    //QString password=this->password->text();
+    int id=this->password->text().toInt();
     if(true){
         MainWindow *m=MainWindow::getInstance();
         this->destroy();
         connect(this,&Login::userInit,m,&MainWindow::userInit);
-        emit userInit(1, username);
+        emit userInit(id, username);
         m->show();
     }else {
         QMessageBox::information(this,"登录失败","账号或密码错误");

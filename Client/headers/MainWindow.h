@@ -30,6 +30,8 @@ class MainWindow:public QWidget{
     static MainWindow *getInstance();
     QString getUsername();
     QString getFriendUsername();
+    int getFriendId();
+    int getUserId();
 
     private:
     MainWindow(QWidget *parent=nullptr);
@@ -47,5 +49,5 @@ class MainWindow:public QWidget{
     public slots:
     void userInit(int id,QString username);
     void showDialog(QListWidgetItem* item);
-    void transmitMessage(QString username,QByteArray message);
+    void transmitMessage(int id,QByteArray message);
 };

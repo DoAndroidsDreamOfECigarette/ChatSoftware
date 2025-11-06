@@ -6,19 +6,18 @@
 Dialog::Dialog(QWidget *parent):QWidget(parent) { 
     m_socket->connectToHost(QHostAddress(IP),PORT);
     connect(m_socket,&QTcpSocket::connected,this,[=]{
-        m_socket->write(("LOGIN:"+MainWindow::getInstance()->getUsername()).toUtf8());
+        m_socket->write(("LOGIN:"+QString::number(MainWindow::getInstance()->getUserId())).toUtf8());
     });
     connect(m_socket,&QTcpSocket::readyRead,this,[=]{
         QByteArray transmitmessage=m_socket->readAll();
         if (transmitmessage.startsWith("From:")) {
             QList<QByteArray> mes=transmitmessage.split(':');
-            QString fromUsername=mes[1];
+            int id=mes[1].toInt();
             mes.remove(0,2);
             QByteArray realmessage=mes.join(':');
-            emit transmitMessages(fromUsername,realmessage);
+            emit transmitMessages(id,realmessage);
         }
     });
-    //connect(this,&Dialog::transmitMessages,MainWindow::getInstance(),&MainWindow::transmitMessage);
     connect(this,&Dialog::showMessage,this,&Dialog::showMessages);
 
     layout->addWidget(splitter);
@@ -29,8 +28,8 @@ Dialog::Dialog(QWidget *parent):QWidget(parent) {
 
     connect(textArea,&TextArea::send,this,&Dialog::showMessages);
     connect(textArea,&TextArea::send,this,[=](QString message){
-        QString username=MainWindow::getInstance()->getFriendUsername();
-        m_socket->write(("To:"+username+":From:"+MainWindow::getInstance()->getUsername()+":"+message).toUtf8());
+        int id=MainWindow::getInstance()->getFriendId();
+        m_socket->write(("To:"+QString::number(id)+":From:"+QString::number(MainWindow::getInstance()->getUserId())+":"+message).toUtf8());
     });
 };
 

@@ -2,8 +2,9 @@
 #include <qlistwidget.h>
 #include <qobject.h>
 
-Friend::Friend(QString username,QString text,QListWidget *parent){
+Friend::Friend(int id,QString username,QString text,QListWidget *parent){
     setData(FriendUsername,username);
+    setData(FriendId, id);
     if (text.isEmpty()) {
         setText(username);
     }else{

@@ -19,8 +19,8 @@ class socketHandler:public QThread{
     qintptr socketDescriptor;
 
     signals:
-    void saveUser(QString username,socketHandler *handler);
-    void transmitMessage(QString username,QString message);
+    void saveUser(int id,socketHandler *handler);
+    void transmitMessage(int id,QString message);
     void sendMessage(QString message);
 
     public slots:

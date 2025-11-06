@@ -22,9 +22,9 @@ class TcpServer:public QObject{
     ~TcpServer();
     myTcpServer *m_s=new myTcpServer(this);
     static TcpServer* instance;
-    static QHash<QString, socketHandler*> userList;
+    static QHash<int, socketHandler*> userList;
 
     private slots:
-    void saveUser(QString username,socketHandler *handler);
-    void transmitMessage(QString username,QString message);
+    void saveUser(int id,socketHandler *handler);
+    void transmitMessage(int id,QString message);
 };

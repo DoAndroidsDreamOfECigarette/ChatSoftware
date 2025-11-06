@@ -54,6 +54,10 @@ QString MainWindow::getFriendUsername(){
     return friends->getSelectedFriendUsername();
 };
 
+int MainWindow::getFriendId(){
+    return friends->getSelectedFriendId();
+};
+
 QList<QListWidgetItem*> MainWindow::initialFriends(){ 
     for (auto item : friends->getAllFriends()) {
         Dialog *dialog=new Dialog(this);
@@ -69,6 +73,10 @@ void MainWindow::showDialog(QListWidgetItem* item){
     dialogstack->addWidget(dialogs->value(item));
 };
 
-void MainWindow::transmitMessage(QString username,QByteArray message){ 
-    emit dialogs->value(friends->getFriendbyId(username))->showMessage(QString::fromUtf8(message));
+void MainWindow::transmitMessage(int id,QByteArray message){ 
+    emit dialogs->value(friends->getFriendbyId(id))->showMessage(QString::fromUtf8(message));
+};
+
+int MainWindow::getUserId(){
+    return user.id;
 };

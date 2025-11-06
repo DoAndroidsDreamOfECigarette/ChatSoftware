@@ -33,12 +33,12 @@ TcpServer::TcpServer(){
     
 };
 
-void TcpServer::saveUser(QString username,socketHandler *handler){
-    userList.insert(username,handler);
+void TcpServer::saveUser(int id,socketHandler *handler){
+    userList.insert(id,handler);
 };
 
-void TcpServer::transmitMessage(QString username,QString message){
-    userList.value(username,nullptr)->sendMessage(message);
+void TcpServer::transmitMessage(int id,QString message){
+    userList.value(id,nullptr)->sendMessage(message);
 };
 
 TcpServer* TcpServer::getInstance(){
@@ -48,7 +48,7 @@ TcpServer* TcpServer::getInstance(){
     return instance;
 };
 
-QHash<QString,socketHandler*> TcpServer::userList;
+QHash<int,socketHandler*> TcpServer::userList;
 
 TcpServer* TcpServer::instance=nullptr;
 

@@ -19,17 +19,17 @@ void socketHandler::run(){
     connect(m_socket,&QTcpSocket::readyRead,this,[=]{
         QByteArray message=m_socket->readAll();
         if(message.startsWith("LOGIN:")){
-            QString username=QString::fromUtf8(message.mid(6));
-            emit saveUser(username,this);
+            int id=QString::fromUtf8(message.mid(6)).toInt();
+            emit saveUser(id,this);
             m_socket->write(QString("服务器收到"+username+"连接").toUtf8());
             spdlog::info(QString("服务器收到"+username+"连接").toStdString());
         }else if(message.startsWith("To:")){
             spdlog::info(message.toStdString());
             QList<QByteArray> mes=message.split(':');
-            QString username=mes[1];
+            int id=mes[1].toInt();
             mes.remove(0,2);
             QByteArray realmessage=mes.join(':');
-            emit transmitMessage(username,realmessage);
+            emit transmitMessage(id,realmessage);
         }
     });
 

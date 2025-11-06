@@ -23,7 +23,7 @@ class Dialog:public QWidget{
     QTcpSocket *m_socket=new QTcpSocket(this);
 
     signals:
-    void transmitMessages(QString fromUsername,QByteArray realMessage);
+    void transmitMessages(int id,QByteArray realMessage);
     void showMessage(QString message);
 
     private slots:

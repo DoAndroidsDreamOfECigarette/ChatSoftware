@@ -5,12 +5,13 @@
 #include <qtmetamacros.h>
 
 enum FriendRole{
-    FriendUsername=Qt::UserRole
+    FriendId=Qt::UserRole,
+    FriendUsername
 };
 
 class Friend:public QListWidgetItem{
     public:
-    Friend(QString usernmae,QString text,QListWidget *parent=nullptr);
+    Friend(int id,QString usernmae,QString text,QListWidget *parent=nullptr);
     ~Friend();
     QString getUsername();
 

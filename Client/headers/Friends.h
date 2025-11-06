@@ -15,8 +15,9 @@ class Friends:public QWidget{
     Friends(QWidget *parent = nullptr);
     ~Friends();
     QString getSelectedFriendUsername();
+    int getSelectedFriendId();
     QListWidgetItem* getSelectedFriend();
-    QListWidgetItem* getFriendbyId(QString username);
+    QListWidgetItem* getFriendbyId(int id);
     QList<QListWidgetItem*> getAllFriends();
 
     private:
@@ -27,5 +28,5 @@ class Friends:public QWidget{
     void friendSelectedChanged();
 
     private slots:
-    void addFriend(QString username,QString text="");
+    void addFriend(int id,QString username,QString text="");
 };
