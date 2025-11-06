@@ -1,6 +1,10 @@
 #include "MainWindow.h"
+#include "Dialog.h"
+#include "Friends.h"
 #include <qdebug.h>
 #include <qhostaddress.h>
+#include <qlist.h>
+#include <qlistwidget.h>
 #include <qnamespace.h>
 #include <qobject.h>
 #include <qpushbutton.h>
@@ -13,12 +17,17 @@
 
 MainWindow::MainWindow(QWidget *parent):QWidget(parent){
     this->resize(800,600);
+    initialFriends();
 
     hlayout->addWidget(splitter);
     splitter->addWidget(friends);
-    splitter->addWidget(dialog);
+    splitter->addWidget(dialogstack);
     splitter->setStretchFactor(0, 1);
     splitter->setStretchFactor(1, 3);
+
+    connect(friends,&Friends::friendSelectedChanged,this,[=]{
+        showDialog(friends->getSelectedFriend());
+    });
 };
 
 MainWindow* MainWindow::getInstance(){
@@ -43,4 +52,17 @@ QString MainWindow::getUsername(){
 
 QString MainWindow::getFriendUsername(){
     return friends->getSelectedFriendUsername();
+};
+
+QList<QListWidgetItem*> MainWindow::initialFriends(){ 
+    for (auto item : friends->getAllFriends()) {
+        dialogs->insert(item,new Dialog(this));
+    }
+    dialogstack->addWidget(dialogs->begin().value());
+    return friends->getAllFriends();
+};
+
+void MainWindow::showDialog(QListWidgetItem* item){
+    dialogstack->removeWidget(dialogstack->currentWidget());
+    dialogstack->addWidget(dialogs->value(item));
 };
