@@ -12,7 +12,7 @@ find_package(spdlog CONFIG REQUIRED)
 qt_standard_project_setup()
 
 file(GLOB SRC "src/*.cpp")
-file(GLOB HEADERS "headers/*.h")
+file(GLOB HEADERS "headers/*.h" "resources/*.")
 file(GLOB UI "ui/*.ui")
 
 qt_add_executable(Client
@@ -21,7 +21,7 @@ qt_add_executable(Client
     ${UI}
 )
 
-target_include_directories(Client PRIVATE headers ui)
+target_include_directories(Client PRIVATE headers ui resources)
 target_link_libraries(Client PRIVATE spdlog::spdlog Qt6::Network)
 
 set_target_properties(Client PROPERTIES AUTOUIC_SEARCH_PATHS "./ui")

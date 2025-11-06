@@ -14,17 +14,17 @@
 #include <qwidget.h>
 #include <QListWidget>
 #include <QSplitter>
-#include "TextArea.h"
+#include "Dialog.h"
 #include "User.h"
-
-#define IP "127.0.0.1"
-#define PORT ((unsigned short)8899)
+#include "Friends.h"
 
 class MainWindow:public QWidget{
     Q_OBJECT
 
     public:
     static MainWindow *getInstance();
+    QString getUsername();
+    QString getFriendUsername();
 
     private:
     MainWindow(QWidget *parent=nullptr);
@@ -32,18 +32,11 @@ class MainWindow:public QWidget{
 
     static MainWindow *Instance;
     QHBoxLayout *hlayout=new QHBoxLayout(this);
-    QListWidget *friends=new QListWidget(this);
-    QListWidget *talkDialog=new QListWidget(this);
-    QSplitter *splitter1=new QSplitter(Qt::Horizontal,this);
-    QSplitter *splitter2=new QSplitter(Qt::Vertical,this);
-    TextArea *textArea=new TextArea(this);
-    QTcpSocket *m_socket=new QTcpSocket(this);
+    QSplitter *splitter=new QSplitter(Qt::Horizontal,this);
+    Friends *friends=new Friends(splitter);
+    Dialog *dialog=new Dialog(splitter);
     User user;
 
     public slots:
     void userInit(int id,QString username);
-
-    private slots:
-    void showMessages(QString message);
-    
 };

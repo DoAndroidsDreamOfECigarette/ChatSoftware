@@ -8,6 +8,7 @@ TextArea::TextArea(QWidget *parent):QWidget(parent){
     btnlayout->addStretch();
     btnlayout->addWidget(sendbtn);
     textlayout->addWidget(textEdit);
+    textlayout->setContentsMargins(0,0,0,0);
 
     connect(sendbtn,&QPushButton::clicked,this,&TextArea::sendMessage);
     textEdit->installEventFilter(this);
