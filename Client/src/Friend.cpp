@@ -13,3 +13,11 @@ Friend::Friend(int id,QString username,QString text,QListWidget *parent){
 };
 
 Friend::~Friend(){};
+
+QString Friend::getUsername(){
+    return data(FriendUsername).toString();
+}
+
+int Friend::getId(){
+    return data(FriendId).toInt();
+}

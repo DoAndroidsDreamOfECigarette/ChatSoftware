@@ -38,7 +38,7 @@ bool TextArea::sendMessage(){
     if(!message.isEmpty()){
         textEdit->clear();
         textEdit->setFocus();
-        emit send(message);
+        emit send("Me",message);
         return true;
     }else{
         return false;

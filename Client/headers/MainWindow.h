@@ -42,6 +42,7 @@ class MainWindow:public QWidget{
     QSplitter *splitter=new QSplitter(Qt::Horizontal,this);
     Friends *friends=new Friends(splitter);
     QStackedWidget *dialogstack=new QStackedWidget(splitter);
+    
     QHash<QListWidgetItem*,Dialog*> *dialogs=new QHash<QListWidgetItem*, Dialog*>();
     QList<QListWidgetItem*> initialFriends();
     User user;

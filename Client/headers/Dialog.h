@@ -1,4 +1,5 @@
 #pragma once
+#include "Friend.h"
 #include "TextArea.h"
 #include <qboxlayout.h>
 #include <qcontainerfwd.h>
@@ -12,7 +13,7 @@ class Dialog:public QWidget{
     Q_OBJECT
     
     public:
-    Dialog(QWidget *parent = nullptr);
+    Dialog(Friend *theFriend,QWidget *parent = nullptr);
     ~Dialog();
 
     private:
@@ -21,11 +22,12 @@ class Dialog:public QWidget{
     TextArea *textArea=new TextArea(splitter);
     QListWidget *talkDialog=new QListWidget(splitter);
     QTcpSocket *m_socket=new QTcpSocket(this);
+    Friend *theFriend;
 
     signals:
     void transmitMessages(int id,QByteArray realMessage);
-    void showMessage(QString message);
+    void showMessage(QString flag,QString message);
 
     private slots:
-    void showMessages(QString message);
+    void showMessages(QString flag,QString message);
 };

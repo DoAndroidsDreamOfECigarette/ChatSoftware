@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "Dialog.h"
+#include "Friend.h"
 #include "Friends.h"
 #include <qdebug.h>
 #include <qhostaddress.h>
@@ -60,7 +61,7 @@ int MainWindow::getFriendId(){
 
 QList<QListWidgetItem*> MainWindow::initialFriends(){ 
     for (auto item : friends->getAllFriends()) {
-        Dialog *dialog=new Dialog(this);
+        Dialog *dialog=new Dialog(dynamic_cast<Friend*>(item),this);
         connect(dialog,&Dialog::transmitMessages,this,&MainWindow::transmitMessage);
         dialogs->insert(item,dialog);
     }
@@ -74,7 +75,7 @@ void MainWindow::showDialog(QListWidgetItem* item){
 };
 
 void MainWindow::transmitMessage(int id,QByteArray message){ 
-    emit dialogs->value(friends->getFriendbyId(id))->showMessage(QString::fromUtf8(message));
+    emit dialogs->value(friends->getFriendbyId(id))->showMessage("Other",QString::fromUtf8(message));
 };
 
 int MainWindow::getUserId(){

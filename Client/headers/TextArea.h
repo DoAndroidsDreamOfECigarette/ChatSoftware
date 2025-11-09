@@ -6,7 +6,6 @@
 #include <qtmetamacros.h>
 #include <qwidget.h>
 
-
 class TextArea:public QWidget{
     Q_OBJECT
 
@@ -24,7 +23,7 @@ class TextArea:public QWidget{
     QTextEdit *textEdit=new QTextEdit(this);
 
     signals:
-    void send(QString);
+    void send(QString flag,QString message);
 
     private slots:
     bool sendMessage();

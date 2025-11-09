@@ -14,6 +14,7 @@ class Friend:public QListWidgetItem{
     Friend(int id,QString usernmae,QString text,QListWidget *parent=nullptr);
     ~Friend();
     QString getUsername();
+    int getId();
 
     private:
 };
