@@ -10,7 +10,7 @@
 Dialog::Dialog(Friend *theFriend,QWidget *parent):QWidget(parent),theFriend(theFriend) { 
     m_socket->connectToHost(QHostAddress(IP),PORT);
     connect(m_socket,&QTcpSocket::connected,this,[=]{
-        m_socket->write(("LOGIN:"+QString::number(MainWindow::getInstance()->getUserId())).toUtf8());
+        m_socket->write(("LOGIN_SUCCESS:"+QString::number(MainWindow::getInstance()->getUserId())).toUtf8());
     });
     connect(m_socket,&QTcpSocket::readyRead,this,[=]{
         QByteArray transmitmessage=m_socket->readAll();

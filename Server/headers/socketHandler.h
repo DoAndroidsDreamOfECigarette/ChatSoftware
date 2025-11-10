@@ -22,6 +22,8 @@ class socketHandler:public QThread{
     void saveUser(int id,socketHandler *handler);
     void transmitMessage(int id,QString message);
     void sendMessage(QString message);
+    void registerUser(QString username,QString password);
+    void loginUser(QString username,QString password);
 
     public slots:
     void run() override;

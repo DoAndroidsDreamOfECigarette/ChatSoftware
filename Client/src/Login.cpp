@@ -1,53 +1,55 @@
 #include "Login.h"
+#include <qfont.h>
 #include <qlineedit.h>
 #include <qmessagebox.h>
 #include <qnamespace.h>
 #include <qobject.h>
 #include <qobjectdefs.h>
 #include <qpushbutton.h>
+#include <qtmetamacros.h>
 #include <qwidget.h>
 #include <QLineEdit>
 #include <QMessageBox>
 #include "MainWindow.h"
 #include <spdlog/spdlog.h>
+#include <qlabel.h>
 
 Login::Login(QWidget *parent):QWidget(parent){
     resize(600,420);
     this->setStyleSheet("QPushButton {min-width:50px;min-height:25px}");
     hlayout->addLayout(vlayout);
     vlayout->addStretch();
+    title->setAlignment(Qt::AlignCenter);
+    title->setFont(QFont("SimHei",18,QFont::Normal));
+    title->setMargin(20);
+    vlayout->addWidget(title);
     vlayout->addWidget(username);
     vlayout->addWidget(password);
     vlayout->addLayout(btnlayout);
     btnlayout->addWidget(loginBtn);
-    btnlayout->addWidget(quitBtn);
+    btnlayout->addWidget(registerBtn);
     vlayout->addStretch();
     username->setFixedSize(200,30);
     password->setFixedSize(200,30);
     username->setPlaceholderText("用户名");
     password->setPlaceholderText("密码");
     password->setEchoMode(QLineEdit::Password);
-    connect(loginBtn,&QPushButton::clicked,this,&Login::login);
-    connect(quitBtn,&QPushButton::clicked,this,&Login::exit);
+    connect(loginBtn,&QPushButton::clicked,this,&Login::loginbtnClicked);
+    connect(registerBtn,&QPushButton::clicked,this,&Login::gotoRegister);
 };
 
-void Login::login(){
+void Login::loginbtnClicked(){
     QString username=this->username->text();
-    //QString password=this->password->text();
-    int id=this->password->text().toInt();
-    if(true){
-        MainWindow *m=MainWindow::getInstance();
-        this->destroy();
-        connect(this,&Login::userInit,m,&MainWindow::userInit);
-        emit userInit(id, username);
-        m->show();
+    QString password=this->password->text();
+    if (username.isEmpty()||password.isEmpty()) {
+        QMessageBox::information(this,"登录失败","请填写用户名和密码");
     }else {
-        QMessageBox::information(this,"登录失败","账号或密码错误");
+        emit loginApply(username,password);
     }
 };
 
-void Login::exit(){
-    spdlog::info("退出失败!");   
-}
+QString Login::getUsername(){
+    return username->text();
+};
 
 Login::~Login(){};

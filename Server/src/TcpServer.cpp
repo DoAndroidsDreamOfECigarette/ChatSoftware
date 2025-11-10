@@ -21,14 +21,29 @@ TcpServer::TcpServer(){
         spdlog::error("服务器监听失败：{}", m_s->errorString().toStdString());
     }
     connect(m_s,&myTcpServer::newDescriptor,this,[&](qintptr socketDescriptor){
-        spdlog::info("有用户连接");
         socketHandler *handler=new socketHandler(socketDescriptor);
         QThread *thread=new QThread(this);
         handler->moveToThread(thread);
         thread->start();
+
         connect(thread,&QThread::started,handler,&socketHandler::run);
         connect(handler,&socketHandler::saveUser,this,&TcpServer::saveUser);
         connect(handler,&socketHandler::transmitMessage,this,&TcpServer::transmitMessage);
+        connect(handler,&socketHandler::registerUser,this,[=](QString username,QString password){
+            if(db->registerUser(username, password)){
+                handler->sendMessage("REGISTER_SUCCESS:注册成功");
+            }else {
+                handler->sendMessage("REGISTER_FAIL:用户名已存在");
+            }
+        });
+        connect(handler,&socketHandler::loginUser,this,[=](QString username,QString password){
+            int id=db->loginUser(username, password);
+            if(id!=-1){
+                handler->sendMessage("LOGIN_SUCCESS:ID:"+QString::number(id)+":登录成功");
+            }else {
+                handler->sendMessage("LOGIN_FAIL:用户名或密码错误");
+            }
+        });
     });
     
 };

@@ -1,15 +1,13 @@
-#include "Login.h"
+#include "Index.h"
 #include <QApplication>
 #include <qdebug.h>
 #include <qlineedit.h>
-#include "MainWindow.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
-    Login l;
-    l.show();
+    Index index;
+    index.show();
 
     return a.exec();
 }

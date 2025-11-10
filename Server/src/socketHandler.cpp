@@ -1,9 +1,11 @@
 #pragma once
 #include "socketHandler.h"
+#include <qlist.h>
 #include <qobject.h>
 #include <qstringview.h>
 #include <qtcpsocket.h>
 #include <qthread.h>
+#include <qtmetamacros.h>
 #include <qtypes.h>
 #include <spdlog/spdlog.h>
 
@@ -18,14 +20,20 @@ void socketHandler::run(){
 
     connect(m_socket,&QTcpSocket::readyRead,this,[=]{
         QByteArray message=m_socket->readAll();
+        QList<QByteArray> mes=message.split(':');
         if(message.startsWith("LOGIN:")){
-            int id=QString::fromUtf8(message.mid(6)).toInt();
-            emit saveUser(id,this);
-            m_socket->write(QString("服务器收到"+username+"连接").toUtf8());
-            spdlog::info(QString("服务器收到"+username+"连接").toStdString());
+            QString username=mes[1];
+            QString password=mes[2];
+            emit loginUser(username, password);
+        }else if (message.startsWith("LOGIN_SUCCESS:")) {
+            int id=mes[1].toInt();
+            emit saveUser(id, this);
+        }else if (message.startsWith("REGISTER:")){
+            QString username=mes[1];
+            QString password=mes[2];
+            emit registerUser(username, password);
         }else if(message.startsWith("To:")){
             spdlog::info(message.toStdString());
-            QList<QByteArray> mes=message.split(':');
             int id=mes[1].toInt();
             mes.remove(0,2);
             QByteArray realmessage=mes.join(':');

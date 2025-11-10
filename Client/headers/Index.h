@@ -1,0 +1,30 @@
+#pragma once
+#include "Login.h"
+#include "Register.h"
+#include <qobject.h>
+#include <qtcpsocket.h>
+#include <qtmetamacros.h>
+#include <qwidget.h>
+#include "IP.h"
+
+class Index:public QWidget{
+    Q_OBJECT
+
+    public:
+    Index(QWidget *parent=nullptr);
+    ~Index();
+
+    private:
+    Login *loginWindow=new Login(this);
+    Register *registerWindow=new Register(this);
+    QTcpSocket *socket=new QTcpSocket(this);
+
+    signals:
+    void userInit(int,QString);
+
+    private slots:
+    void gotoLogin();
+    void gotoRegister();
+    void registerApply(QString username,QString password);
+    void loginApply(QString username,QString password);
+};
