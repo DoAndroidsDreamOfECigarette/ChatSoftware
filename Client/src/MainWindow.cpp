@@ -21,9 +21,25 @@
 #include <qwidget.h>
 #include <QThread>
 #include <QToolButton>
+#include "IP.h"
 
 MainWindow::MainWindow(QWidget *parent):QWidget(parent){
     this->resize(800,600);
+    m_socket->connectToHost(QHostAddress(IP),PORT);
+    connect(m_socket,&QTcpSocket::connected,this,[=]{
+        m_socket->write(("LOGIN_SUCCESS:"+QString::number(MainWindow::getInstance()->getUserId())).toUtf8());
+    });
+    connect(m_socket,&QTcpSocket::readyRead,this,[=]{
+        QByteArray transmitmessage=m_socket->readAll();
+        if (transmitmessage.startsWith("From:")) {
+            QList<QByteArray> mes=transmitmessage.split(':');
+            int id=mes[1].toInt();
+            mes.remove(0,2);
+            QByteArray realmessage=mes.join(':');
+            emit dialogs->value(friends->getFriendbyId(id))->showMessage("Other",QString::fromUtf8(realmessage));
+        }
+    });
+
     initialFriends();
 
     hlayout->addWidget(splitter);
@@ -70,7 +86,7 @@ int MainWindow::getFriendId(){
 QList<QListWidgetItem*> MainWindow::initialFriends(){ 
     for (auto item : friends->getAllFriends()) {
         Dialog *dialog=new Dialog(dynamic_cast<Friend*>(item),this);
-        connect(dialog,&Dialog::transmitMessages,this,&MainWindow::transmitMessage);
+        connect(dialog,&Dialog::sendMessage,this,&MainWindow::sendMessagetoServer);
         dialogs->insert(item,dialog);
     }
     dialogstack->addWidget(dialogs->begin().value());
@@ -82,10 +98,10 @@ void MainWindow::showDialog(QListWidgetItem* item){
     dialogstack->addWidget(dialogs->value(item));
 };
 
-void MainWindow::transmitMessage(int id,QByteArray message){ 
-    emit dialogs->value(friends->getFriendbyId(id))->showMessage("Other",QString::fromUtf8(message));
-};
-
 int MainWindow::getUserId(){
     return user.id;
+};
+
+void MainWindow::sendMessagetoServer(QString message){
+    m_socket->write(message.toUtf8());
 };

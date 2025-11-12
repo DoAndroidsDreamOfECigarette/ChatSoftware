@@ -21,12 +21,11 @@ class Dialog:public QWidget{
     QSplitter *splitter=new QSplitter(Qt::Vertical,this);
     TextArea *textArea=new TextArea(this);
     QListWidget *talkDialog=new QListWidget(this);
-    QTcpSocket *m_socket=new QTcpSocket(this);
     Friend *theFriend;
 
     signals:
-    void transmitMessages(int id,QByteArray realMessage);
     void showMessage(QString flag,QString message);
+    void sendMessage(QString message);
 
     private slots:
     void showMessages(QString flag,QString message);

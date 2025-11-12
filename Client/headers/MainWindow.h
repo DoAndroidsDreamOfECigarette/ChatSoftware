@@ -44,7 +44,7 @@ class MainWindow:public QWidget{
     Friends *friends=new Friends(this);
     QStackedWidget *dialogstack=new QStackedWidget(this);
     QListWidgetItem *addFriend=new QListWidgetItem();
-    
+    QTcpSocket *m_socket=new QTcpSocket(this);
 
     QHash<QListWidgetItem*,Dialog*> *dialogs=new QHash<QListWidgetItem*, Dialog*>();
     QList<QListWidgetItem*> initialFriends();
@@ -56,5 +56,5 @@ class MainWindow:public QWidget{
     public slots:
     void userInit(int id,QString username);
     void showDialog(QListWidgetItem* item);
-    void transmitMessage(int id,QByteArray message);
+    void sendMessagetoServer(QString message);
 };
