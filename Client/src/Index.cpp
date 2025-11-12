@@ -17,10 +17,9 @@ Index::Index(QWidget *parent):QWidget(parent){
             QMessageBox::information(this, "注册失败", mes[1]);
         }else if (mes[0]=="LOGIN_SUCCESS") {
             int id=mes[2].toInt();
-            MainWindow *m=MainWindow::getInstance();
-            connect(this,&Index::userInit,m,&MainWindow::userInit);
             QString username=loginWindow->getUsername();
-            emit userInit(id, username);
+            User user(id,username);
+            MainWindow *m=MainWindow::getInstance(user);
             this->destroy();
             m->show();
         }else if (mes[0]=="LOGIN_FAIL") {

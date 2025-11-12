@@ -2,10 +2,11 @@
 #include "Dialog.h"
 #include "Friend.h"
 #include "Friends.h"
-#include <cstddef>
+#include <combaseapi.h>
 #include <qaction.h>
 #include <qapplication.h>
 #include <qboxlayout.h>
+#include <qcontainerfwd.h>
 #include <qdebug.h>
 #include <qhostaddress.h>
 #include <qicon.h>
@@ -22,10 +23,12 @@
 #include <qwidget.h>
 #include <QThread>
 #include <QToolButton>
+#include <winsock.h>
 #include "IP.h"
 #include "SearchFriends.h"
+#include "SqliteHandler.h"
 
-MainWindow::MainWindow(QWidget *parent):QWidget(parent){
+MainWindow::MainWindow(User user,QWidget *parent):QWidget(parent),user(user){
     this->resize(800,600);
     m_socket->connectToHost(QHostAddress(IP),PORT);
     connect(m_socket,&QTcpSocket::connected,this,[=]{
@@ -44,8 +47,7 @@ MainWindow::MainWindow(QWidget *parent):QWidget(parent){
             emit showSearchResult(username);
         }
     });
-
-    initialFriends();
+    userList=sqliteHandler->getAllFriends();
 
     hlayout->addWidget(splitter);
     splitter->addWidget(Menu);
@@ -53,7 +55,8 @@ MainWindow::MainWindow(QWidget *parent):QWidget(parent){
     splitter->addWidget(dialogstack);
     splitter->setStretchFactor(0, 1);
     splitter->setStretchFactor(1, 3);
-
+    
+    initialFriends();
     connect(friends,&Friends::friendSelectedChanged,this,[=]{
         showDialog(friends->getSelectedFriend());
     });
@@ -63,21 +66,21 @@ MainWindow::MainWindow(QWidget *parent):QWidget(parent){
         searchFriends->show();
     });
     connect(this,&MainWindow::showSearchResult,searchFriends,&SearchFriends::showAllResult);
-    connect(searchFriends,&SearchFriends::addFriend,friends,&Friends::addFriend);
+    connect(searchFriends,&SearchFriends::addFriend,friends,[=](int id,QString username){
+        sqliteHandler->saveUserToFriedsList(id,username);
+        userList=sqliteHandler->getAllFriends();
+        friends->addFriend(id,username);
+    });
     connect(friends,&Friends::flashFriends,this,&MainWindow::initialFriends);
 };
 
-MainWindow* MainWindow::getInstance(){
+MainWindow* MainWindow::getInstance(User user){
     if (Instance==nullptr){
-        Instance=new MainWindow(nullptr);
+        Instance=new MainWindow(user,nullptr);
     }
     return Instance;
 }
 
-void MainWindow::userInit(int id,QString username){
-    this->user.id=id;
-    this->user.username=username;
-};
 
 MainWindow* MainWindow::Instance=nullptr;
 
@@ -96,6 +99,7 @@ int MainWindow::getFriendId(){
 };
 
 QList<QListWidgetItem*> MainWindow::initialFriends(){ 
+    friends->updateFriendsList(userList);
     auto list=friends->getAllFriends();
     if (list.isEmpty()){
         dialogstack->addWidget(new Dialog(nullptr,this));

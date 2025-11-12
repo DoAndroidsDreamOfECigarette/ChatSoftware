@@ -8,7 +8,7 @@
 #include <qtextcursor.h>
 #include <qtmetamacros.h>
 #include <qwidget.h>
-#include "SearchFriends.h"
+#include "User.h"
 
 class Friends:public QWidget{
     Q_OBJECT
@@ -34,4 +34,5 @@ class Friends:public QWidget{
 
     public slots:
     void addFriend(int id,QString username,QString text="");
+    void updateFriendsList(QList<User> userList);
 };

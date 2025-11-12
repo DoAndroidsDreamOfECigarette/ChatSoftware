@@ -20,7 +20,6 @@ class Index:public QWidget{
     QTcpSocket *socket=new QTcpSocket(this);
 
     signals:
-    void userInit(int,QString);
 
     private slots:
     void gotoLogin();

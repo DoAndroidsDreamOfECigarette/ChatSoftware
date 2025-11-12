@@ -6,11 +6,13 @@
 #include <qlistwidget.h>
 #include <qnamespace.h>
 #include <qobject.h>
+#include <qtmetamacros.h>
 
 Friends::Friends(QWidget *parent) : QWidget(parent) { 
     layout->addWidget(friendsList);
     layout->addWidget(addFriendButton);
     
+    emit flashFriends();
     connect(friendsList,&QListWidget::itemSelectionChanged,this,&Friends::friendSelectedChanged);
 };
 
@@ -48,4 +50,11 @@ QListWidgetItem* Friends::getFriendbyId(int id){
         }
     }
     return nullptr;
+}
+
+void Friends::updateFriendsList(QList<User> userList){
+    friendsList->clear();
+    for(int i = 0; i < userList.size();i++){
+        friendsList->addItem(new Friend(userList[i].id,userList[i].username,""));
+    }
 }
