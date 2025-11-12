@@ -2,6 +2,7 @@
 #include "Dialog.h"
 #include "Friend.h"
 #include "Friends.h"
+#include <cstddef>
 #include <qaction.h>
 #include <qapplication.h>
 #include <qboxlayout.h>
@@ -22,6 +23,7 @@
 #include <QThread>
 #include <QToolButton>
 #include "IP.h"
+#include "SearchFriends.h"
 
 MainWindow::MainWindow(QWidget *parent):QWidget(parent){
     this->resize(800,600);
@@ -30,13 +32,16 @@ MainWindow::MainWindow(QWidget *parent):QWidget(parent){
         m_socket->write(("LOGIN_SUCCESS:"+QString::number(MainWindow::getInstance()->getUserId())).toUtf8());
     });
     connect(m_socket,&QTcpSocket::readyRead,this,[=]{
-        QByteArray transmitmessage=m_socket->readAll();
-        if (transmitmessage.startsWith("From:")) {
-            QList<QByteArray> mes=transmitmessage.split(':');
+        QByteArray message=m_socket->readAll();
+        QList<QByteArray> mes=message.split(':');
+        if (message.startsWith("From:")) {
             int id=mes[1].toInt();
             mes.remove(0,2);
             QByteArray realmessage=mes.join(':');
             emit dialogs->value(friends->getFriendbyId(id))->showMessage("Other",QString::fromUtf8(realmessage));
+        }else if (message.startsWith("GET_USERNAME_SUCCESS:")) {
+            QString username=mes[1];
+            emit showSearchResult(username);
         }
     });
 
@@ -53,6 +58,13 @@ MainWindow::MainWindow(QWidget *parent):QWidget(parent){
         showDialog(friends->getSelectedFriend());
     });
     connect(this,&MainWindow::friendAdded,friends,&Friends::addFriend);
+    connect(searchFriends,&SearchFriends::searchFriend,this,&MainWindow::sendMessagetoServer);
+    connect(friends->addFriendButton,&QPushButton::clicked,this,[=]{ 
+        searchFriends->show();
+    });
+    connect(this,&MainWindow::showSearchResult,searchFriends,&SearchFriends::showAllResult);
+    connect(searchFriends,&SearchFriends::addFriend,friends,&Friends::addFriend);
+    connect(friends,&Friends::flashFriends,this,&MainWindow::initialFriends);
 };
 
 MainWindow* MainWindow::getInstance(){
@@ -84,13 +96,18 @@ int MainWindow::getFriendId(){
 };
 
 QList<QListWidgetItem*> MainWindow::initialFriends(){ 
-    for (auto item : friends->getAllFriends()) {
+    auto list=friends->getAllFriends();
+    if (list.isEmpty()){
+        dialogstack->addWidget(new Dialog(nullptr,this));
+        return list;
+    }
+    for (auto item : list) {
         Dialog *dialog=new Dialog(dynamic_cast<Friend*>(item),this);
         connect(dialog,&Dialog::sendMessage,this,&MainWindow::sendMessagetoServer);
         dialogs->insert(item,dialog);
     }
     dialogstack->addWidget(dialogs->begin().value());
-    return friends->getAllFriends();
+    return list;
 };
 
 void MainWindow::showDialog(QListWidgetItem* item){

@@ -22,15 +22,15 @@ class Friends:public QWidget{
     QListWidgetItem* getSelectedFriend();
     QListWidgetItem* getFriendbyId(int id);
     QList<QListWidgetItem*> getAllFriends();
+    QPushButton *addFriendButton=new QPushButton("添加好友(...)",this);
 
     private:
     QVBoxLayout *layout=new QVBoxLayout(this);
     QListWidget *friendsList=new QListWidget(this);
-    SearchFriends *searchFriends=new SearchFriends();
-    QPushButton *addFriendButton=new QPushButton("添加好友(...)",this);
 
     signals:
     void friendSelectedChanged();
+    void flashFriends();
 
     public slots:
     void addFriend(int id,QString username,QString text="");

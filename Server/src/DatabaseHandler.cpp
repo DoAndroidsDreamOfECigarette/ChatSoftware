@@ -59,25 +59,29 @@ int DatabaseHandler::loginUser(QString username, QString password){
 }
 
 int DatabaseHandler::getIdByUsername(QString username){
-    QString getIdsql="SELECT id FROM user WHERE username='"+username+"'";
+    QString getIdsql="SELECT id FROM users WHERE username='"+username+"'";
     int ret=mysql_query(db, getIdsql.toStdString().c_str());
     if(!ret) { 
         MYSQL_RES *result = mysql_store_result(db);
         MYSQL_ROW row = mysql_fetch_row(result);
         int id = atoi(row[0]);
         return id;
+    }else {
+        spdlog::error("SQL语句出错:"+QString(mysql_error(db)).toStdString());
     }
     return -1;
 };
 
 QString DatabaseHandler::getUsernameById(int id){
-    QString getIdsql="SELECT username FROM user WHERE id="+QString::number(id);
+    QString getIdsql="SELECT username FROM users WHERE id="+QString::number(id);
     int ret=mysql_query(db, getIdsql.toStdString().c_str());
     if(!ret) { 
         MYSQL_RES *result = mysql_store_result(db);
         MYSQL_ROW row = mysql_fetch_row(result);
         QString username = row[0];
         return username;
+    }else {
+        spdlog::error("SQL语句出错:"+QString(mysql_error(db)).toStdString());
     }
     return NULL;
 } 

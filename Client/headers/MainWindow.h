@@ -18,6 +18,7 @@
 #include <qwidget.h>
 #include <QListWidget>
 #include <QSplitter>
+#include "SearchFriends.h"
 #include "User.h"
 #include "Friends.h"
 #include <QStackedWidget>
@@ -45,16 +46,18 @@ class MainWindow:public QWidget{
     QStackedWidget *dialogstack=new QStackedWidget(this);
     QListWidgetItem *addFriend=new QListWidgetItem();
     QTcpSocket *m_socket=new QTcpSocket(this);
+    SearchFriends *searchFriends=new SearchFriends();
 
     QHash<QListWidgetItem*,Dialog*> *dialogs=new QHash<QListWidgetItem*, Dialog*>();
-    QList<QListWidgetItem*> initialFriends();
     User user;
-
+    
     signals:
     void friendAdded(int id,QString username,QString text="");
-
+    void showSearchResult(QString username);
+    
     public slots:
     void userInit(int id,QString username);
     void showDialog(QListWidgetItem* item);
     void sendMessagetoServer(QString message);
+    QList<QListWidgetItem*> initialFriends();
 };

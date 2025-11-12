@@ -21,6 +21,7 @@ void socketHandler::run(){
     connect(m_socket,&QTcpSocket::readyRead,this,[=]{
         QByteArray message=m_socket->readAll();
         QList<QByteArray> mes=message.split(':');
+        spdlog::info(message.toStdString());
         if(message.startsWith("LOGIN:")){
             QString username=mes[1];
             QString password=mes[2];
@@ -36,7 +37,6 @@ void socketHandler::run(){
             int id=mes[1].toInt();
             emit getUsernameById(id);
         }else if(message.startsWith("To:")){
-            spdlog::info(message.toStdString());
             int id=mes[1].toInt();
             mes.remove(0,2);
             QByteArray realmessage=mes.join(':');

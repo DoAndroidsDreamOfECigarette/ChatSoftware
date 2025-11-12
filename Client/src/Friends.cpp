@@ -1,6 +1,5 @@
 #include "Friends.h"
 #include "Friend.h"
-#include <cstddef>
 #include <qboxlayout.h>
 #include <qlineedit.h>
 #include <qlist.h>
@@ -11,19 +10,15 @@
 Friends::Friends(QWidget *parent) : QWidget(parent) { 
     layout->addWidget(friendsList);
     layout->addWidget(addFriendButton);
-    addFriend(2,"hello");
-    addFriend(3,"123");
     
     connect(friendsList,&QListWidget::itemSelectionChanged,this,&Friends::friendSelectedChanged);
-    connect(addFriendButton,&QPushButton::clicked,this,[=]{
-        searchFriends->show();
-    });
 };
 
 Friends::~Friends() {};
 
 void Friends::addFriend(int id,QString username,QString text){
     friendsList->addItem(new Friend(id,username,text));
+    emit flashFriends();
 }
 
 QString Friends::getSelectedFriendUsername(){
