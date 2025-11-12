@@ -5,8 +5,11 @@
 #include <qcolor.h>
 #include <qcontainerfwd.h>
 #include <qlistwidget.h>
+#include <qlocale.h>
 #include <qnamespace.h>
 #include <qobject.h>
+#include <QDateTime>
+
 Dialog::Dialog(Friend *theFriend,QWidget *parent):QWidget(parent),theFriend(theFriend) { 
     m_socket->connectToHost(QHostAddress(IP),PORT);
     connect(m_socket,&QTcpSocket::connected,this,[=]{
@@ -42,10 +45,10 @@ Dialog::~Dialog(){};
 void Dialog::showMessages(QString flag,QString message){
     QListWidgetItem* Message=new QListWidgetItem;
     if (flag=="Me") {
-        Message->setText(MainWindow::getInstance()->getUsername()+":\n"+message);
+        Message->setText(MainWindow::getInstance()->getUsername()+QDateTime::currentDateTime().toString(":\tyyyy-MM-dd hh:mm:ss\n")+message);
         Message->setForeground(Qt::green);
     }else if (flag=="Other") {
-        Message->setText(theFriend->getUsername()+":\n"+message);
+        Message->setText(theFriend->getUsername()+QDateTime::currentDateTime().toString(":\tyyyy-MM-dd hh:mm:ss\n")+message);
         Message->setForeground(Qt::blue);
     }
     talkDialog->addItem(Message);

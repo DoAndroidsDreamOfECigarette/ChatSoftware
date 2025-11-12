@@ -19,8 +19,8 @@ class Dialog:public QWidget{
     private:
     QVBoxLayout *layout=new QVBoxLayout(this);
     QSplitter *splitter=new QSplitter(Qt::Vertical,this);
-    TextArea *textArea=new TextArea(splitter);
-    QListWidget *talkDialog=new QListWidget(splitter);
+    TextArea *textArea=new TextArea(this);
+    QListWidget *talkDialog=new QListWidget(this);
     QTcpSocket *m_socket=new QTcpSocket(this);
     Friend *theFriend;
 

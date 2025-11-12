@@ -2,8 +2,12 @@
 #include "Dialog.h"
 #include "Friend.h"
 #include "Friends.h"
+#include <qaction.h>
+#include <qapplication.h>
+#include <qboxlayout.h>
 #include <qdebug.h>
 #include <qhostaddress.h>
+#include <qicon.h>
 #include <qlist.h>
 #include <qlistwidget.h>
 #include <qnamespace.h>
@@ -11,17 +15,20 @@
 #include <qpushbutton.h>
 #include <qsizepolicy.h>
 #include <qstringview.h>
+#include <qstyle.h>
 #include <qtcpsocket.h>
 #include <qtextedit.h>
 #include <qwidget.h>
 #include <QThread>
+#include <QToolButton>
 
 MainWindow::MainWindow(QWidget *parent):QWidget(parent){
     this->resize(800,600);
     initialFriends();
 
     hlayout->addWidget(splitter);
-    splitter->addWidget(friends);
+    splitter->addWidget(Menu);
+    Menu->addWidget(friends);
     splitter->addWidget(dialogstack);
     splitter->setStretchFactor(0, 1);
     splitter->setStretchFactor(1, 3);

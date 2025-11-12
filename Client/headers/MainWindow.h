@@ -40,12 +40,18 @@ class MainWindow:public QWidget{
     static MainWindow *Instance;
     QHBoxLayout *hlayout=new QHBoxLayout(this);
     QSplitter *splitter=new QSplitter(Qt::Horizontal,this);
-    Friends *friends=new Friends(splitter);
-    QStackedWidget *dialogstack=new QStackedWidget(splitter);
+    QStackedWidget *Menu=new QStackedWidget(this);
+    Friends *friends=new Friends(this);
+    QStackedWidget *dialogstack=new QStackedWidget(this);
+    QListWidgetItem *addFriend=new QListWidgetItem();
     
+
     QHash<QListWidgetItem*,Dialog*> *dialogs=new QHash<QListWidgetItem*, Dialog*>();
     QList<QListWidgetItem*> initialFriends();
     User user;
+
+    signals:
+    void friendAdded(int id,QString username,QString text="");
 
     public slots:
     void userInit(int id,QString username);
