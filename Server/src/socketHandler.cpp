@@ -32,6 +32,9 @@ void socketHandler::run(){
             QString username=mes[1];
             QString password=mes[2];
             emit registerUser(username, password);
+        }else if (message.startsWith("SEARCHBYID:")) {
+            int id=mes[1].toInt();
+            emit getUsernameById(id);
         }else if(message.startsWith("To:")){
             spdlog::info(message.toStdString());
             int id=mes[1].toInt();

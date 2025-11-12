@@ -1,15 +1,23 @@
 #include "Friends.h"
 #include "Friend.h"
+#include <cstddef>
+#include <qboxlayout.h>
+#include <qlineedit.h>
 #include <qlist.h>
 #include <qlistwidget.h>
+#include <qnamespace.h>
 #include <qobject.h>
 
 Friends::Friends(QWidget *parent) : QWidget(parent) { 
     layout->addWidget(friendsList);
+    layout->addWidget(addFriendButton);
     addFriend(2,"hello");
     addFriend(3,"123");
-
+    
     connect(friendsList,&QListWidget::itemSelectionChanged,this,&Friends::friendSelectedChanged);
+    connect(addFriendButton,&QPushButton::clicked,this,[=]{
+        searchFriends->show();
+    });
 };
 
 Friends::~Friends() {};
@@ -31,11 +39,11 @@ QListWidgetItem* Friends::getSelectedFriend(){
 };
 
 QList<QListWidgetItem*> Friends::getAllFriends(){
-    QList<QListWidgetItem*> *allFriends = new QList<QListWidgetItem*>();
+    QList<QListWidgetItem*> allFriends;
     for(int i = 0; i <friendsList->count();i++){
-        allFriends->append(friendsList->item(i));
+        allFriends.append(friendsList->item(i));
     }
-    return *allFriends;
+    return allFriends;
 }
 
 QListWidgetItem* Friends::getFriendbyId(int id){

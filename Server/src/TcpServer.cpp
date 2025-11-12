@@ -44,6 +44,12 @@ TcpServer::TcpServer(){
                 handler->sendMessage("LOGIN_FAIL:用户名或密码错误");
             }
         });
+        connect(handler,&socketHandler::getUsernameById,this,[=](int id){
+            QString username=db->getUsernameById(id);
+            if (!username.isEmpty()) {
+                handler->sendMessage("GET_USERNAME_SUCCESS:"+username);
+            }
+        });
     });
     
 };

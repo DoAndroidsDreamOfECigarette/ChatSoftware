@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent):QWidget(parent){
     connect(friends,&Friends::friendSelectedChanged,this,[=]{
         showDialog(friends->getSelectedFriend());
     });
+    connect(this,&MainWindow::friendAdded,friends,&Friends::addFriend);
 };
 
 MainWindow* MainWindow::getInstance(){

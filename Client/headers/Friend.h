@@ -11,7 +11,7 @@ enum FriendRole{
 
 class Friend:public QListWidgetItem{
     public:
-    Friend(int id,QString usernmae,QString text,QListWidget *parent=nullptr);
+    Friend(int id,QString username,QString text,QListWidget *parent=nullptr);
     ~Friend();
     QString getUsername();
     int getId();

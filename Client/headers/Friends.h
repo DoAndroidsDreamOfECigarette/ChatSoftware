@@ -4,9 +4,11 @@
 #include <qlist.h>
 #include <qlistwidget.h>
 #include <qobject.h>
+#include <qpushbutton.h>
 #include <qtextcursor.h>
 #include <qtmetamacros.h>
 #include <qwidget.h>
+#include "SearchFriends.h"
 
 class Friends:public QWidget{
     Q_OBJECT
@@ -16,6 +18,7 @@ class Friends:public QWidget{
     ~Friends();
     QString getSelectedFriendUsername();
     int getSelectedFriendId();
+
     QListWidgetItem* getSelectedFriend();
     QListWidgetItem* getFriendbyId(int id);
     QList<QListWidgetItem*> getAllFriends();
@@ -23,10 +26,12 @@ class Friends:public QWidget{
     private:
     QVBoxLayout *layout=new QVBoxLayout(this);
     QListWidget *friendsList=new QListWidget(this);
+    SearchFriends *searchFriends=new SearchFriends();
+    QPushButton *addFriendButton=new QPushButton("添加好友(...)",this);
 
     signals:
     void friendSelectedChanged();
 
-    private slots:
+    public slots:
     void addFriend(int id,QString username,QString text="");
 };
