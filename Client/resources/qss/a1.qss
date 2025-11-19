@@ -1,0 +1,16 @@
+.MainWindow,.Dialog,.Index {
+    background: qlineargradient(y1:0, y2:1, stop:0 white,stop:1 gray)
+}
+QSplitter{
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+}
+QSplitter::handle{
+    background-color: rgba(0,0,0,0);
+    border:0px
+}
+QLineEdit{
+    border-radius: 5px;
+    background: qlineargradient(x1:0, x2:1, stop:0 white,stop:1 gray)
+}

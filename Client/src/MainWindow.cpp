@@ -50,8 +50,7 @@ MainWindow::MainWindow(User user,QWidget *parent):QWidget(parent),user(user){
     userList=sqliteHandler->getAllFriends();
 
     hlayout->addWidget(splitter);
-    splitter->addWidget(Menu);
-    Menu->addWidget(friends);
+    splitter->addWidget(friends);
     splitter->addWidget(dialogstack);
     splitter->setStretchFactor(0, 1);
     splitter->setStretchFactor(1, 3);

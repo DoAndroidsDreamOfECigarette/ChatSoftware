@@ -21,7 +21,7 @@ qt_add_executable(Client
     ${UI}
 )
 
-target_include_directories(Client PRIVATE headers ui resources)
+target_include_directories(Client PRIVATE headers ui resources resources/qss)
 target_link_libraries(Client PRIVATE spdlog::spdlog Qt6::Network Qt6::Sql)
 
 set_target_properties(Client PROPERTIES AUTOUIC_SEARCH_PATHS "./ui")

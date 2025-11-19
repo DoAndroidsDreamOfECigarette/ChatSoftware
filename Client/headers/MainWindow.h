@@ -45,10 +45,8 @@ class MainWindow:public QWidget{
     static MainWindow *Instance;
     QHBoxLayout *hlayout=new QHBoxLayout(this);
     QSplitter *splitter=new QSplitter(Qt::Horizontal,this);
-    QStackedWidget *Menu=new QStackedWidget(this);
     Friends *friends=new Friends(this);
     QStackedWidget *dialogstack=new QStackedWidget(this);
-    QListWidgetItem *addFriend=new QListWidgetItem();
     QTcpSocket *m_socket=new QTcpSocket(this);
     SearchFriends *searchFriends=new SearchFriends();
     
