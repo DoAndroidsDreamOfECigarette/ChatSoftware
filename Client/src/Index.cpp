@@ -2,28 +2,32 @@
 #include "MainWindow.h"
 #include <qhostaddress.h>
 #include <QMessageBox>
+#include <qjsonobject.h>
 #include <qlist.h>
 #include <qmessagebox.h>
+#include <qobject.h>
 #include <qstringview.h>
 
 Index::Index(QWidget *parent):QWidget(parent){
     socket->connectToHost(QHostAddress(IP),PORT);
     connect(socket, &QTcpSocket::readyRead, this,[=]{
         QString msg = socket->readAll();
-        QList<QString> mes=msg.split(':');
-        if (mes[0]=="REGISTER_SUCCESS") {
-            QMessageBox::information(this, "注册成功", mes[1]);
-        }else if (mes[0]=="REGISTER_FAIL") {
-            QMessageBox::information(this, "注册失败", mes[1]);
-        }else if (mes[0]=="LOGIN_SUCCESS") {
-            int id=mes[2].toInt();
-            QString username=loginWindow->getUsername();
-            User user(id,username);
-            MainWindow *m=MainWindow::getInstance(user);
-            this->destroy();
-            m->show();
-        }else if (mes[0]=="LOGIN_FAIL") {
-            QMessageBox::information(this, "登录失败", mes[1]);
+        QJsonObject lr_back=MessageProtocol::Byte2Json(msg.toUtf8());
+        if (lr_back["type"].toString()=="L/R_BACK") {
+            if (lr_back["state"].toString()=="REGISTER_SUCCESS") {
+                QMessageBox::information(this, "注册成功", lr_back["describe"].toString());
+            }else if (lr_back["state"].toString()=="REGISTER_FAIL") {
+                QMessageBox::information(this, "注册失败", lr_back["describe"].toString());
+            }else if (lr_back["state"].toString()=="LOGIN_SUCCESS") {
+                int id=lr_back["id"].toInt();
+                QString username=loginWindow->getUsername();
+                User user(id,username);
+                MainWindow *m=MainWindow::getInstance(user);
+                this->destroy();
+                m->show();
+            }else if (lr_back["state"].toString()=="LOGIN_FAIL") {
+                QMessageBox::information(this, "登录失败", lr_back["describe"].toString());
+            }
         }
     });
 
@@ -49,9 +53,9 @@ void Index::gotoRegister(){
 }
 
 void Index::registerApply(QString username, QString password){
-    socket->write(QString("REGISTER:" + username + ":" + password).toUtf8());
+    socket->write(MessageProtocol::create_Register_Message(username, password));
 }
 
 void Index::loginApply(QString username, QString password){
-    socket->write(QString("LOGIN:" + username + ":" + password).toUtf8());
+    socket->write(MessageProtocol::create_Login_Message(username, password));
 }

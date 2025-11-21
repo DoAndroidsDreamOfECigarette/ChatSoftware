@@ -1,4 +1,5 @@
 #include "SearchFriends.h"
+#include "MainWindow.h"
 #include <qobject.h>
 #include <qpushbutton.h>
 #include <qwidget.h>
@@ -14,8 +15,7 @@ SearchFriends::SearchFriends(QWidget *parent):QWidget(parent){
 
     connect(searchButton,&QPushButton::clicked,this,[=]{
         int id=lineEdit->text().toInt();
-        QString searchText="SEARCHBYID:"+QString::number(id);
-        emit searchFriend(searchText);
+        emit searchFriend(MessageProtocol::create_Search_Message(id));
     });
 
     connect(addButton,&QPushButton::clicked,this,[=]{
@@ -28,5 +28,6 @@ SearchFriends::SearchFriends(QWidget *parent):QWidget(parent){
 SearchFriends::~SearchFriends(){};
 
 void SearchFriends::showAllResult(QString username){
+    searchList->clear();
     searchList->addItem(username);
 };

@@ -10,6 +10,7 @@
 #include <qdebug.h>
 #include <qhostaddress.h>
 #include <qicon.h>
+#include <qjsonobject.h>
 #include <qlist.h>
 #include <qlistwidget.h>
 #include <qnamespace.h>
@@ -32,19 +33,21 @@ MainWindow::MainWindow(User user,QWidget *parent):QWidget(parent),user(user){
     this->resize(800,600);
     m_socket->connectToHost(QHostAddress(IP),PORT);
     connect(m_socket,&QTcpSocket::connected,this,[=]{
-        m_socket->write(("LOGIN_SUCCESS:"+QString::number(MainWindow::getInstance()->getUserId())).toUtf8());
+        QJsonObject login_back=MessageProtocol::create_LR_Back("LOGIN_SUCCESS","",getUserId());
+        m_socket->write(MessageProtocol::Json2Byte(login_back));
     });
     connect(m_socket,&QTcpSocket::readyRead,this,[=]{
         QByteArray message=m_socket->readAll();
-        QList<QByteArray> mes=message.split(':');
-        if (message.startsWith("From:")) {
-            int id=mes[1].toInt();
-            mes.remove(0,2);
-            QByteArray realmessage=mes.join(':');
-            emit dialogs->value(friends->getFriendbyId(id))->showMessage("Other",QString::fromUtf8(realmessage));
-        }else if (message.startsWith("GET_USERNAME_SUCCESS:")) {
-            QString username=mes[1];
-            emit showSearchResult(username);
+        QJsonObject message_json=MessageProtocol::Byte2Json(message);
+        if (message_json["type"].toString()=="SEND") {
+            int send_id=message_json["send_id"].toInt();
+            QString realmessage=message_json["message"].toString();
+            emit dialogs->value(friends->getFriendbyId(send_id))->showMessage("Other",realmessage);
+        }else if(message_json["type"].toString()=="SEARCH_BACK"){
+            if(message_json["state"].toString()=="GET_USERNAME_SUCCESS") {
+                QString username=message_json["username"].toString();
+                emit showSearchResult(username);
+            }
         }
     });
     userList=sqliteHandler->getAllFriends();

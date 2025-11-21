@@ -22,7 +22,7 @@ Dialog::Dialog(Friend *theFriend,QWidget *parent):QWidget(parent),theFriend(theF
     connect(textArea,&TextArea::send,this,&Dialog::showMessages);
     connect(textArea,&TextArea::send,this,[=](QString flag,QString message){
         int id=MainWindow::getInstance()->getFriendId();
-        emit sendMessage(("To:"+QString::number(id)+":From:"+QString::number(MainWindow::getInstance()->getUserId())+":"+message).toUtf8());
+        emit sendMessage(MessageProtocol::create_Send_Message(id,MainWindow::getInstance()->getUserId(),message));
     });
 };
 

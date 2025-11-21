@@ -18,13 +18,13 @@
 #include <qwidget.h>
 #include <QListWidget>
 #include <QSplitter>
-#include "MainWindow.h"
 #include "SearchFriends.h"
 #include "SqliteHandler.h"
 #include "User.h"
 #include "Friends.h"
 #include <QStackedWidget>
 #include "Dialog.h"
+#include "MessageProtocol.h"
 
 class MainWindow:public QWidget{
     Q_OBJECT

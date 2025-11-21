@@ -1,6 +1,7 @@
 #pragma once
 #include "myTcpServer.h"
 #include <qhash.h>
+#include <qjsonobject.h>
 #include <qobject.h>
 #include <qtcpserver.h>
 #include <qtcpsocket.h>
@@ -8,6 +9,7 @@
 #include <qrunnable.h>
 #include "socketHandler.h"
 #include "DatabaseHandler.h"
+#include "MessageProtocol.h"
 
 #define PORT ((unsigned short)8899)
 
@@ -28,5 +30,5 @@ class TcpServer:public QObject{
 
     private slots:
     void saveUser(int id,socketHandler *handler);
-    void transmitMessage(int id,QString message);
+    void transmitMessage(QJsonObject message_json);
 };

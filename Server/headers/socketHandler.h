@@ -1,4 +1,5 @@
 #pragma once
+#include <qjsonobject.h>
 #include <qobject.h>
 #include <qrunnable.h>
 #include <qtcpsocket.h>
@@ -20,7 +21,7 @@ class socketHandler:public QThread{
 
     signals:
     void saveUser(int id,socketHandler *handler);
-    void transmitMessage(int id,QString message);
+    void transmitMessage(QJsonObject message_json);
     void sendMessage(QString message);
     void registerUser(QString username,QString password);
     void loginUser(QString username,QString password);

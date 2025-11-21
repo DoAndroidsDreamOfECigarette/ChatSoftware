@@ -1,4 +1,5 @@
 #pragma once
+#include "MessageProtocol.h"
 #include <qlist.h>
 #include <qobject.h>
 #include <qsqldatabase.h>

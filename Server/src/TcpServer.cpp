@@ -2,6 +2,7 @@
 #include "TcpServer.h"
 #include <qhash.h>
 #include <qhostaddress.h>
+#include <qjsonobject.h>
 #include <qobject.h>
 #include <qstringview.h>
 #include <qtcpserver.h>
@@ -31,23 +32,27 @@ TcpServer::TcpServer(){
         connect(handler,&socketHandler::transmitMessage,this,&TcpServer::transmitMessage);
         connect(handler,&socketHandler::registerUser,this,[=](QString username,QString password){
             if(db->registerUser(username, password)){
-                handler->sendMessage("REGISTER_SUCCESS:注册成功");
+                QJsonObject register_back=MessageProtocol::create_LR_Back("REGISTER_SUCCESS","注册成功");
+                handler->sendMessage(QString(MessageProtocol::Json2Byte(register_back)));
             }else {
-                handler->sendMessage("REGISTER_FAIL:用户名已存在");
+                QJsonObject register_back=MessageProtocol::create_LR_Back("REGISTER_FAIL","用户名已存在");
+                handler->sendMessage(QString(MessageProtocol::Json2Byte(register_back)));
             }
         });
         connect(handler,&socketHandler::loginUser,this,[=](QString username,QString password){
             int id=db->loginUser(username, password);
             if(id!=-1){
-                handler->sendMessage("LOGIN_SUCCESS:ID:"+QString::number(id)+":登录成功");
+                QJsonObject login_back=MessageProtocol::create_LR_Back("LOGIN_SUCCESS","登录成功",id);
+                handler->sendMessage(QString(MessageProtocol::Json2Byte(login_back)));
             }else {
-                handler->sendMessage("LOGIN_FAIL:用户名或密码错误");
+                QJsonObject login_back=MessageProtocol::create_LR_Back("LOGIN_FAIL","用户名或密码错误");
+                handler->sendMessage(QString(MessageProtocol::Json2Byte(login_back)));
             }
         });
         connect(handler,&socketHandler::getUsernameById,this,[=](int id){
             QString username=db->getUsernameById(id);
             if (!username.isEmpty()) {
-                handler->sendMessage("GET_USERNAME_SUCCESS:"+username);
+                handler->sendMessage(MessageProtocol::create_Search_Back(id, username,"GET_USERNAME_SUCCESS"));
             }
         });
     });
@@ -58,8 +63,9 @@ void TcpServer::saveUser(int id,socketHandler *handler){
     userList.insert(id,handler);
 };
 
-void TcpServer::transmitMessage(int id,QString message){
-    userList.value(id,nullptr)->sendMessage(message);
+void TcpServer::transmitMessage(QJsonObject message_json){
+    int receive_id=message_json["receive_id"].toInt();
+    userList.value(receive_id,nullptr)->sendMessage(QString(MessageProtocol::Json2Byte(message_json)));
 };
 
 TcpServer* TcpServer::getInstance(){
