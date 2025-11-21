@@ -1,4 +1,5 @@
 #include "TextArea.h"
+#include "MainWindow.h"
 #include <qcoreevent.h>
 #include <qevent.h>
 #include <qtmetamacros.h>
@@ -35,10 +36,11 @@ bool TextArea::eventFilter(QObject *obj,QEvent *event){
 
 bool TextArea::sendMessage(){
     QString message=textEdit->toPlainText();
+    QString time=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
     if(!message.isEmpty()){
         textEdit->clear();
         textEdit->setFocus();
-        emit send("Me",message);
+        emit send(MessageProtocol::create_Chat_Record(MainWindow::getInstance()->getFriendId(),time,"Me",message));
         return true;
     }else{
         return false;

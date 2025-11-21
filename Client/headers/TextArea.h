@@ -1,5 +1,6 @@
 #pragma once
 #include <qboxlayout.h>
+#include <qjsonobject.h>
 #include <qobject.h>
 #include <qpushbutton.h>
 #include <qtextedit.h>
@@ -23,7 +24,7 @@ class TextArea:public QWidget{
     QTextEdit *textEdit=new QTextEdit(this);
 
     signals:
-    void send(QString flag,QString message);
+    void send(QJsonObject chat_record);
 
     private slots:
     bool sendMessage();

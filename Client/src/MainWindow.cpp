@@ -42,7 +42,10 @@ MainWindow::MainWindow(User user,QWidget *parent):QWidget(parent),user(user){
         if (message_json["type"].toString()=="SEND") {
             int send_id=message_json["send_id"].toInt();
             QString realmessage=message_json["message"].toString();
-            emit dialogs->value(friends->getFriendbyId(send_id))->showMessage("Other",realmessage);
+            QString time=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+            QJsonObject chat_record=MessageProtocol::create_Chat_Record(send_id,time,"Other",realmessage);
+            emit dialogs->value(friends->getFriendbyId(send_id))->showMessage(chat_record);
+            sqliteHandler->save_chat_record(chat_record);
         }else if(message_json["type"].toString()=="SEARCH_BACK"){
             if(message_json["state"].toString()=="GET_USERNAME_SUCCESS") {
                 QString username=message_json["username"].toString();
@@ -110,6 +113,15 @@ QList<QListWidgetItem*> MainWindow::initialFriends(){
     for (auto item : list) {
         Dialog *dialog=new Dialog(dynamic_cast<Friend*>(item),this);
         connect(dialog,&Dialog::sendMessage,this,&MainWindow::sendMessagetoServer);
+        connect(dialog,&Dialog::save_chat_record,sqliteHandler,&SqliteHandler::save_chat_record);
+        int friend_id=static_cast<Friend*>(item)->getId();
+        QList<QJsonObject> chat_record_list=sqliteHandler->get_All_chat_record(friend_id);
+        for (auto chat_record:chat_record_list) {
+            QString message=chat_record["message"].toString();
+            QString time=chat_record["time"].toString();
+            QString flag=chat_record["flag"].toString();
+            dialog->showMessage(chat_record);
+        }
         dialogs->insert(item,dialog);
     }
     dialogstack->addWidget(dialogs->begin().value());

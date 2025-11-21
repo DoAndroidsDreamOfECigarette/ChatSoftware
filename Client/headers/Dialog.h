@@ -3,11 +3,13 @@
 #include "TextArea.h"
 #include <qboxlayout.h>
 #include <qcontainerfwd.h>
+#include <qjsonobject.h>
 #include <qlistwidget.h>
 #include <qsplitter.h>
 #include <qtcpsocket.h>
 #include <qtmetamacros.h>
 #include <qwidget.h>
+
 
 class Dialog:public QWidget{
     Q_OBJECT
@@ -15,6 +17,7 @@ class Dialog:public QWidget{
     public:
     Dialog(Friend *theFriend,QWidget *parent = nullptr);
     ~Dialog();
+    QJsonObject last_chat_Record;
 
     private:
     QVBoxLayout *layout=new QVBoxLayout(this);
@@ -24,9 +27,10 @@ class Dialog:public QWidget{
     Friend *theFriend;
 
     signals:
-    void showMessage(QString flag,QString message);
+    void showMessage(QJsonObject chat_record);
     void sendMessage(QString message);
+    void save_chat_record(QJsonObject chat_record);
 
     private slots:
-    void showMessages(QString flag,QString message);
+    void showMessages(QJsonObject chat_record);
 };

@@ -51,6 +51,15 @@ QByteArray MessageProtocol::create_Send_Message(int receive_id,int send_id, QStr
     return Json2Byte(send_Message);
 }
 
+QJsonObject MessageProtocol::create_Chat_Record(int friend_id,QString time, QString flag, QString message){
+    QJsonObject chat_record;
+    chat_record["friend_id"]=friend_id;
+    chat_record["flag"]=flag;
+    chat_record["time"]=time;
+    chat_record["message"]=message;
+    return chat_record;
+}
+
 QJsonObject MessageProtocol::create_LR_Back(QString state,QString describe,int id){
     QJsonObject lr_back;
     lr_back["type"]="L/R_BACK";
