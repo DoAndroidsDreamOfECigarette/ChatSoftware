@@ -5,11 +5,13 @@
 #include <qjsonobject.h>
 #include <qlist.h>
 #include <qmessagebox.h>
+#include <qnamespace.h>
 #include <qobject.h>
 #include <qstringview.h>
 
-Index::Index(QWidget *parent):QWidget(parent){
+Index::Index(QWidget *parent):GlassWindow(parent){
     socket->connectToHost(QHostAddress(IP),PORT);
+    
     connect(socket, &QTcpSocket::readyRead, this,[=]{
         QString msg = socket->readAll();
         QJsonObject lr_back=MessageProtocol::Byte2Json(msg.toUtf8());

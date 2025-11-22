@@ -1,4 +1,5 @@
 #pragma once
+#include "Index.h"
 #include "Login.h"
 #include "Register.h"
 #include <qobject.h>
@@ -6,8 +7,9 @@
 #include <qtmetamacros.h>
 #include <qwidget.h>
 #include "IP.h"
+#include "GlassWindow.hpp"
 
-class Index:public QWidget{
+class Index:public GlassWindow{
     Q_OBJECT
 
     public:

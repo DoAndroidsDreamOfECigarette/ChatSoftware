@@ -27,9 +27,8 @@
 #include <winsock.h>
 #include "IP.h"
 #include "SearchFriends.h"
-#include "SqliteHandler.h"
 
-MainWindow::MainWindow(User user,QWidget *parent):QWidget(parent),user(user){
+MainWindow::MainWindow(User user,QWidget *parent):GlassWindow(parent),user(user){
     this->resize(800,600);
     m_socket->connectToHost(QHostAddress(IP),PORT);
     connect(m_socket,&QTcpSocket::connected,this,[=]{
@@ -104,6 +103,11 @@ int MainWindow::getFriendId(){
 };
 
 QList<QListWidgetItem*> MainWindow::initialFriends(){ 
+    while (dialogstack->count() > 0) {
+        QWidget *widget = dialogstack->widget(0);
+        dialogstack->removeWidget(widget);
+        delete widget;  // 如果你需要删除页面对象
+    }
     friends->updateFriendsList(userList);
     auto list=friends->getAllFriends();
     if (list.isEmpty()){
@@ -123,6 +127,7 @@ QList<QListWidgetItem*> MainWindow::initialFriends(){
             dialog->showMessage(chat_record);
         }
         dialogs->insert(item,dialog);
+        showDialog(item);
     }
     dialogstack->addWidget(dialogs->begin().value());
     return list;

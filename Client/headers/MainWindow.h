@@ -24,9 +24,9 @@
 #include "Friends.h"
 #include <QStackedWidget>
 #include "Dialog.h"
-#include "MessageProtocol.h"
+#include "GlassWindow.hpp"
 
-class MainWindow:public QWidget{
+class MainWindow:public GlassWindow{
     Q_OBJECT
 
     public:

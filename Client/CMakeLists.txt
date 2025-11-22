@@ -12,7 +12,7 @@ find_package(spdlog CONFIG REQUIRED)
 qt_standard_project_setup()
 
 file(GLOB SRC "src/*.cpp")
-file(GLOB HEADERS "headers/*.h" "resources/*.")
+file(GLOB HEADERS "headers/*.h" "resources/*.hpp" "resources/*.")
 file(GLOB UI "ui/*.ui")
 
 qt_add_executable(Client
