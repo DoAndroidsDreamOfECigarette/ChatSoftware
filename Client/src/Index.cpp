@@ -1,8 +1,6 @@
 #include "Index.h"
 #include "GlassWindow.hpp"
 #include "MainWindow.h"
-#include "Navigation.h"
-#include <cstdlib>
 #include <qframe.h>
 #include <qhostaddress.h>
 #include <QMessageBox>
@@ -12,9 +10,17 @@
 #include <qnamespace.h>
 #include <qobject.h>
 #include <qstringview.h>
+#include <qtcpsocket.h>
+#include <winsock.h>
 
 Index::Index(GlassWindow *parent):GlassWindow(parent){
-    socket->connectToHost(QHostAddress(IP),PORT);
+    connect(timer, &QTimer::timeout,this,[=]{
+        socket->connectToHost(QHostAddress(IP),PORT);
+        connect(socket,&QTcpSocket::connected,this,[=]{
+            timer->stop();
+        });
+    });
+    timer->start(1000);
     
     resize(700,500);
     layout->addWidget(this);

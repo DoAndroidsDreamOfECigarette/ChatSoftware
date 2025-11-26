@@ -60,6 +60,7 @@ public:
         cornerRadius=15;
         setAttribute(Qt::WA_TranslucentBackground);
 
+
 #ifdef Q_OS_WIN
         HWND hWnd = reinterpret_cast<HWND>(this->winId());
         HMODULE hUser = GetModuleHandle(L"user32.dll");

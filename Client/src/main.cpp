@@ -6,6 +6,7 @@
 #include <qfont.h>
 #include <qfontdatabase.h>
 #include <qimage.h>
+#include <qnamespace.h>
 #include <qobject.h>
 #include <spdlog/spdlog.h>
 

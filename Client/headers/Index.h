@@ -11,6 +11,7 @@
 #include "IP.h"
 #include "GlassWindow.hpp"
 #include "Navigation.h"
+#include <QTimer>
 
 class Index:public GlassWindow{
     Q_OBJECT
@@ -25,6 +26,7 @@ class Index:public GlassWindow{
     QTcpSocket *socket=new QTcpSocket(this);
     Navigation *navigation=new Navigation(this);
     QVBoxLayout *layout=new QVBoxLayout(this);
+    QTimer *timer=new QTimer(this);
 
 
     private slots:
