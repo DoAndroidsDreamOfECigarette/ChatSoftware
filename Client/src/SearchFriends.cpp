@@ -1,10 +1,11 @@
 #include "SearchFriends.h"
 #include "MainWindow.h"
+#include <qframe.h>
 #include <qobject.h>
 #include <qpushbutton.h>
 #include <qwidget.h>
 
-SearchFriends::SearchFriends(QWidget *parent):QWidget(parent){
+SearchFriends::SearchFriends(QFrame *parent):GlassWindow(parent){
     layout->addWidget(this);
     layout->addLayout(layout2);
     layout2->addWidget(lineEdit);

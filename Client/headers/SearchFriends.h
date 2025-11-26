@@ -5,12 +5,13 @@
 #include <qpushbutton.h>
 #include <qtmetamacros.h>
 #include <qwidget.h>
+#include "GlassWindow.hpp"
 
-class SearchFriends:public QWidget{
+class SearchFriends:public GlassWindow{
     Q_OBJECT
 
     public:
-    SearchFriends(QWidget* parent=nullptr);
+    SearchFriends(QFrame* parent=nullptr);
     ~SearchFriends();
     
     

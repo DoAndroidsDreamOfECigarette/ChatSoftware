@@ -8,11 +8,13 @@
 #include <qboxlayout.h>
 #include <qcontainerfwd.h>
 #include <qdebug.h>
+#include <qframe.h>
 #include <qhostaddress.h>
 #include <qicon.h>
 #include <qjsonobject.h>
 #include <qlist.h>
 #include <qlistwidget.h>
+#include <qmessagebox.h>
 #include <qnamespace.h>
 #include <qobject.h>
 #include <qpushbutton.h>
@@ -28,12 +30,22 @@
 #include "IP.h"
 #include "SearchFriends.h"
 
-MainWindow::MainWindow(User user,QWidget *parent):GlassWindow(parent),user(user){
-    this->resize(800,600);
+MainWindow::MainWindow(User user,QFrame *parent):GlassWindow(parent),user(user){
+    this->resize(1200,800);
+    QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
+    int x = (screenGeometry.width() - this->width()) / 2;
+    int y = (screenGeometry.height() - this->height()) / 2;
+    this->move(x, y);
+    
     m_socket->connectToHost(QHostAddress(IP),PORT);
     connect(m_socket,&QTcpSocket::connected,this,[=]{
+        timer->stop();
         QJsonObject login_back=MessageProtocol::create_LR_Back("LOGIN_SUCCESS","",getUserId());
         m_socket->write(MessageProtocol::Json2Byte(login_back));
+        connect(m_socket, &QTcpSocket::disconnected,this,[=]{
+            connect(timer,&QTimer::timeout,this,&MainWindow::reconnect);
+            timer->start(1000);
+        });
     });
     connect(m_socket,&QTcpSocket::readyRead,this,[=]{
         QByteArray message=m_socket->readAll();
@@ -54,6 +66,8 @@ MainWindow::MainWindow(User user,QWidget *parent):GlassWindow(parent),user(user)
     });
     userList=sqliteHandler->getAllFriends();
 
+    vlayout->addWidget(navigation);
+    vlayout->addLayout(hlayout);
     hlayout->addWidget(splitter);
     splitter->addWidget(friends);
     splitter->addWidget(dialogstack);
@@ -67,6 +81,7 @@ MainWindow::MainWindow(User user,QWidget *parent):GlassWindow(parent),user(user)
     connect(this,&MainWindow::friendAdded,friends,&Friends::addFriend);
     connect(searchFriends,&SearchFriends::searchFriend,this,&MainWindow::sendMessagetoServer);
     connect(friends->addFriendButton,&QPushButton::clicked,this,[=]{ 
+        searchFriends->setWindowModality(Qt::ApplicationModal);
         searchFriends->show();
     });
     connect(this,&MainWindow::showSearchResult,searchFriends,&SearchFriends::showAllResult);
@@ -145,3 +160,8 @@ int MainWindow::getUserId(){
 void MainWindow::sendMessagetoServer(QString message){
     m_socket->write(message.toUtf8());
 };
+
+void MainWindow::reconnect(){
+    m_socket->connectToHost(QHostAddress(IP),PORT);
+    QMessageBox::warning(this,"警告","已断开连接,正在尝试重新连接");
+}

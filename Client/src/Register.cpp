@@ -31,6 +31,9 @@ Register::Register(QWidget *parent) : QWidget(parent) {
 
     connect(loginBtn,&QPushButton::clicked,this,&Register::gotoLogin);
     connect(registerBtn,&QPushButton::clicked,this,&Register::registerUser);
+    connect(username,&QLineEdit::returnPressed,registerBtn,&QPushButton::click);
+    connect(password,&QLineEdit::returnPressed,registerBtn,&QPushButton::click);
+    connect(passwordagin,&QLineEdit::returnPressed,registerBtn,&QPushButton::click);
 };
 
 Register::~Register(){};

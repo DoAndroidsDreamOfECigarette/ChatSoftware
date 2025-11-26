@@ -1,5 +1,9 @@
 #include "Index.h"
+#include "GlassWindow.hpp"
 #include "MainWindow.h"
+#include "Navigation.h"
+#include <cstdlib>
+#include <qframe.h>
 #include <qhostaddress.h>
 #include <QMessageBox>
 #include <qjsonobject.h>
@@ -9,9 +13,14 @@
 #include <qobject.h>
 #include <qstringview.h>
 
-Index::Index(QWidget *parent):GlassWindow(parent){
+Index::Index(GlassWindow *parent):GlassWindow(parent){
     socket->connectToHost(QHostAddress(IP),PORT);
     
+    resize(700,500);
+    layout->addWidget(this);
+    layout->addWidget(navigation);
+    layout->addWidget(loginWindow);
+    layout->addWidget(registerWindow);
     connect(socket, &QTcpSocket::readyRead, this,[=]{
         QString msg = socket->readAll();
         QJsonObject lr_back=MessageProtocol::Byte2Json(msg.toUtf8());

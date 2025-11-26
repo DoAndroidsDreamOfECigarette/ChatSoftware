@@ -1,6 +1,7 @@
 #pragma once
 
 #include <qboxlayout.h>
+#include <qcoreevent.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qmainwindow.h>

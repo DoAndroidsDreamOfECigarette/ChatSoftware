@@ -1,8 +1,12 @@
+QLabel{
+    font-size: 40px;
+}
+
 QPushButton {
     border-radius: 8px;
     background: qlineargradient(x1:0, x2:1, stop:0 #f0f0f0, stop:1 #c0c0c0);
     border: 1px solid #8f8f91;
-    min-width: 80px;
+    min-width: 50px;
     min-height: 30px;
     padding: 6px;
 }
@@ -24,14 +28,16 @@ QPushButton:disabled {
     color: #808080;
 }
 
-QTextEdit,QListWidget{
+*{
     font-size: 16px;
-    font-family: Consolas, 'Courier New',HarmonyOS Sans SC ,monospace,JetBrainsMono Nerd Font;
+    font-family: Cascadia Code,HarmonyOS Sans SC ,monospace,JetBrainsMono Nerd Font;
+    border-radius: 15px;
 }
 
 MainWindow,Index,QTextEdit,QListWidget{
     background: qlineargradient(y1:0, y2:1, stop:0 white,stop:1 gray);
 }
+
 QSplitter{
     padding: 0px;
     margin: 0px;
