@@ -35,6 +35,7 @@ Login::Login(QWidget *parent):QWidget(parent){
     username->setPlaceholderText("用户名");
     password->setPlaceholderText("密码");
     password->setEchoMode(QLineEdit::Password);
+ 
 
     connect(loginBtn,&QPushButton::clicked,this,&Login::loginbtnClicked);
     connect(registerBtn,&QPushButton::clicked,this,&Login::gotoRegister);

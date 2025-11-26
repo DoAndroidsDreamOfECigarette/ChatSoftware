@@ -8,8 +8,9 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #include <QPainterPath>
+#include <QStyleOption>
 
-// 手动定义缺失的结构和枚举，增加保护宏防止重复定义
+// 手动定义缺失的结构和枚举
 #ifndef _WINDOWCOMPOSITIONATTRIB
 typedef enum _WINDOWCOMPOSITIONATTRIB {
     WCA_ACCENT_POLICY = 19
@@ -53,15 +54,45 @@ class GlassWindow : public QFrame {
     Q_OBJECT
 public:
     GlassWindow(QFrame* parent = nullptr) : QFrame(parent) {
-        // 设置无边框窗口
         setWindowFlags(Qt::FramelessWindowHint);
-        // 设置背景透明
-        setAttribute(Qt::WA_TranslucentBackground);
-        cornerRadius=15;
-        setAttribute(Qt::WA_TranslucentBackground);
-
-
+        setAttribute(Qt::WA_TranslucentBackground, true);
+        cornerRadius = 15;
+        
 #ifdef Q_OS_WIN
+        enableBlurBehind();
+#endif
+        
+        bgColor = new QColor(0, 0, 0, 50);
+    }
+
+    ~GlassWindow() {
+        delete bgColor;
+    }
+
+protected:
+    void paintEvent(QPaintEvent* ev) override {
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing);
+        
+        // 绘制阴影效果
+        QPainterPath shadowPath;
+        shadowPath.addRoundedRect(rect().adjusted(2, 2, -2, -2), cornerRadius, cornerRadius);
+        painter.fillPath(shadowPath, QColor(0, 0, 0, 80));
+        
+        // 绘制主背景
+        painter.setBrush(*bgColor);
+        painter.setPen(Qt::NoPen);
+        painter.drawRoundedRect(rect().adjusted(1, 1, -1, -1), cornerRadius, cornerRadius);
+        
+        // 绘制边框
+        painter.setBrush(Qt::NoBrush);
+        painter.setPen(QPen(borderColor, 1));
+        painter.drawRoundedRect(rect().adjusted(1, 1, -1, -1), cornerRadius, cornerRadius);
+    }
+
+private:
+#ifdef Q_OS_WIN
+    void enableBlurBehind() {
         HWND hWnd = reinterpret_cast<HWND>(this->winId());
         HMODULE hUser = GetModuleHandle(L"user32.dll");
         if (hUser) {
@@ -77,37 +108,12 @@ public:
                 setWindowCompositionAttribute(hWnd, &data);
             }
         }
+    }
 #endif
 
-        bgColor = new QColor(0, 0, 0, 1);
-    }
-
-    ~GlassWindow() {
-        delete bgColor;
-    }
-
-protected:
-    void paintEvent(QPaintEvent* ev) override {
-        QPainter painter(this);
-        painter.setRenderHint(QPainter::Antialiasing);
-        painter.setPen(Qt::NoPen);
-
-        // 创建圆角路径
-        QPainterPath path;
-        path.addRoundedRect(rect(), cornerRadius, cornerRadius);
-        
-        // 设置裁剪区域，使整个窗口呈现圆角效果
-        painter.setClipPath(path);
-        
-
-        painter.setBrush(*bgColor);
-        // painter.drawRect(0, 0, width(), height());
-        painter.drawPath(path);
-    }
-
-private:
     QColor* bgColor = nullptr;
-    int cornerRadius=15;
+    QColor borderColor;
+    int cornerRadius;
 };
 
 #endif // GLASS_WINDOW_HPP

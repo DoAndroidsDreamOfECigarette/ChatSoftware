@@ -30,13 +30,11 @@ QPushButton:disabled {
 
 *{
     font-size: 16px;
-    font-family: Cascadia Code,HarmonyOS Sans SC ,monospace,JetBrainsMono Nerd Font;
+    /* font-family: Cascadia Code,HarmonyOS Sans SC ,monospace,JetBrainsMono Nerd Font; */
+    font-family: Maple Mono NF CN;
     border-radius: 15px;
 }
 
-MainWindow,Index,QTextEdit,QListWidget{
-    background: qlineargradient(y1:0, y2:1, stop:0 white,stop:1 gray);
-}
 
 QSplitter{
     padding: 0px;

@@ -15,8 +15,10 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     
     QFile file("../resources/qss/a1.qss");
-    int fontid=QFontDatabase::addApplicationFont("../resources/font/CascadiaCode.ttf");
-    fontid=QFontDatabase::addApplicationFont("../resources/font/HarmonyOS_Sans_Regular.ttf");
+    QFontDatabase::addApplicationFont("../resources/font/CascadiaCode.ttf");
+    QFontDatabase::addApplicationFont("../resources/font/HarmonyOS_Sans_Regular.ttf");
+    QFontDatabase::addApplicationFont("../resources/font/MapleMono-NF-CN-Medium.ttf");
+
     file.open(QIODevice::ReadOnly|QIODevice::Text);
     QString sheet=file.readAll();
     a.setStyleSheet(sheet);
