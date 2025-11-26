@@ -11,10 +11,12 @@
 #include <qobject.h>
 #include <qstringview.h>
 #include <qtcpsocket.h>
+#include <spdlog/spdlog.h>
 #include <winsock.h>
 
 Index::Index(GlassWindow *parent):GlassWindow(parent){
     connect(timer, &QTimer::timeout,this,[=]{
+        spdlog::info("尝试连接服务器");
         socket->connectToHost(QHostAddress(IP),PORT);
         connect(socket,&QTcpSocket::connected,this,[=]{
             timer->stop();
