@@ -35,9 +35,7 @@ public:
 
 protected:
 
-    // ---------------------------
-    // 【2】系统圆角应该写在 showEvent
-    // ---------------------------
+
     void showEvent(QShowEvent* ev) override {
         QFrame::showEvent(ev);
 
@@ -46,9 +44,7 @@ protected:
 #endif
     }
 
-    // ---------------------------
-    // 【3】绘图函数（不需要改动）
-    // ---------------------------
+
     void paintEvent(QPaintEvent* ev) override {
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing);
@@ -77,9 +73,6 @@ private:
 
 #ifdef Q_OS_WIN
 
-    // ---------------------------------------
-    // 【4】模糊函数（你原来的代码，放这里）
-    // ---------------------------------------
     void enableBlurBehind() {
         HWND hWnd = reinterpret_cast<HWND>(winId());
 
@@ -112,9 +105,6 @@ private:
     }
 
 
-    // ---------------------------------------
-    // 【5】Win11 圆角函数（放这里）
-    // ---------------------------------------
     void enableWin11RoundCorners() {
         HWND hWnd = reinterpret_cast<HWND>(winId());
         if (!hWnd) return;

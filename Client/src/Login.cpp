@@ -17,7 +17,7 @@
 
 Login::Login(QWidget *parent):QWidget(parent){
     resize(600,420);
-    this->setStyleSheet("QPushButton {min-width:50px;min-height:25px}");
+    title->setStyleSheet("QLabel{font-size: 40px;}");
     hlayout->addLayout(vlayout);
     vlayout->addStretch();
     title->setAlignment(Qt::AlignCenter);

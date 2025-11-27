@@ -52,7 +52,7 @@ Navigation::Navigation(QWidget *parent) : QWidget(parent)
     
     // 创建布局
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setContentsMargins(10, 0, 10, 0);
+    layout->setContentsMargins(10, 0, 0, 0);
     layout->setSpacing(5);
     
     layout->addStretch();

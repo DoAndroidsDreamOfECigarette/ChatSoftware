@@ -6,6 +6,7 @@
 #include <qtmetamacros.h>
 #include <qwidget.h>
 #include "GlassWindow.hpp"
+#include "Navigation.h"
 
 class SearchFriends:public GlassWindow{
     Q_OBJECT
@@ -22,6 +23,7 @@ class SearchFriends:public GlassWindow{
     QListWidget *searchList=new QListWidget(this);
     QPushButton *searchButton=new QPushButton("搜索",this);
     QPushButton *addButton=new QPushButton("添加",this);
+    Navigation *navigation=new Navigation(this);
 
     signals:
     void searchFriend(QString searchText);

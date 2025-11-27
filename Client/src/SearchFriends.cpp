@@ -6,6 +6,7 @@
 #include <qwidget.h>
 
 SearchFriends::SearchFriends(QFrame *parent):GlassWindow(parent){
+    layout->addWidget(navigation);
     layout->addWidget(this);
     layout->addLayout(layout2);
     layout2->addWidget(lineEdit);
