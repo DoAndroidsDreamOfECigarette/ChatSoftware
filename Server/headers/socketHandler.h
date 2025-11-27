@@ -21,6 +21,7 @@ class socketHandler:public QThread{
 
     signals:
     void saveUser(int id,socketHandler *handler);
+    void deleteUser(int id,socketHandler *handler);
     void transmitMessage(QJsonObject message_json);
     void sendMessage(QString message);
     void registerUser(QString username,QString password);

@@ -1,15 +1,34 @@
 #include "Index.h"
+#include "GlassWindow.hpp"
 #include "MainWindow.h"
+#include <qframe.h>
 #include <qhostaddress.h>
 #include <QMessageBox>
 #include <qjsonobject.h>
 #include <qlist.h>
 #include <qmessagebox.h>
+#include <qnamespace.h>
 #include <qobject.h>
 #include <qstringview.h>
-
-Index::Index(QWidget *parent):QWidget(parent){
-    socket->connectToHost(QHostAddress(IP),PORT);
+#include <qtcpsocket.h>
+#include <spdlog/spdlog.h>
+#include <winsock.h>
+#include "Toast.h"
+Index::Index(GlassWindow *parent):GlassWindow(parent){
+    connect(timer, &QTimer::timeout,this,[=]{
+        Toast::showToast(this, "尝试连接服务器");
+        socket->connectToHost(QHostAddress(IP),PORT);
+        connect(socket,&QTcpSocket::connected,this,[=]{
+            timer->stop();
+        });
+    });
+    timer->start(1000);
+    
+    resize(700,500);
+    layout->addWidget(this);
+    layout->addWidget(navigation);
+    layout->addWidget(loginWindow);
+    layout->addWidget(registerWindow);
     connect(socket, &QTcpSocket::readyRead, this,[=]{
         QString msg = socket->readAll();
         QJsonObject lr_back=MessageProtocol::Byte2Json(msg.toUtf8());

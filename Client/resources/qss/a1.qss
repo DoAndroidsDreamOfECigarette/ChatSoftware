@@ -1,6 +1,37 @@
-.MainWindow,.Dialog,.Index {
-    background: qlineargradient(y1:0, y2:1, stop:0 white,stop:1 gray)
+QPushButton {
+    border-radius: 8px;
+    background: qlineargradient(x1:0, x2:1, stop:0 #f0f0f0, stop:1 #c0c0c0);
+    border: 1px solid #8f8f91;
+    min-width: 50px;
+    min-height: 30px;
+    padding: 6px;
 }
+
+QPushButton:hover {
+    background: qlineargradient(x1:0, x2:1, stop:0 #fdfdfd, stop:1 #e0e0e0);
+    border: 1px solid #9e9e9e;
+}
+
+QPushButton:pressed {
+    background: qlineargradient(x1:0, x2:1, stop:0 #a0a0a0, stop:1 #d0d0d0);
+    border: 1px solid #707070;
+    padding: 7px 5px 5px 7px; /* 模拟按下效果 */
+}
+
+QPushButton:disabled {
+    background: qlineargradient(x1:0, x2:1, stop:0 #e0e0e0, stop:1 #b0b0b0);
+    border: 1px solid #a0a0a0;
+    color: #808080;
+}
+
+*{
+    font-size: 16px;
+    /* font-family: Cascadia Code,HarmonyOS Sans SC ,monospace,JetBrainsMono Nerd Font; */
+    font-family: Maple Mono NF CN;
+    border-radius: 15px;
+}
+
+
 QSplitter{
     padding: 0px;
     margin: 0px;
@@ -14,3 +45,23 @@ QLineEdit{
     border-radius: 5px;
     background: qlineargradient(x1:0, x2:1, stop:0 white,stop:1 gray)
 }
+QListWidget,QTextEdit,QPushButton,QLineEdit {
+    border-radius: 15px;
+    background: transparent;
+    border: 1px solid gray;
+    padding: 2px;
+}
+
+QListWidget::viewport,QTextEdit::viewport,QPushButton::viewport {
+    border-radius: 15px;
+}
+
+QListWidget:item,QTextEdit::item,QPushButton::item {
+    border-radius: 13px;
+    margin: 1px;
+}
+
+QListWidget:item:selected,QTextEdit::item:selected,QPushButton::item::selected {
+    border-radius: 13px;
+}
+

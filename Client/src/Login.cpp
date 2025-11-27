@@ -1,4 +1,5 @@
 #include "Login.h"
+#include <qcoreevent.h>
 #include <qfont.h>
 #include <qlineedit.h>
 #include <qmessagebox.h>
@@ -16,7 +17,7 @@
 
 Login::Login(QWidget *parent):QWidget(parent){
     resize(600,420);
-    this->setStyleSheet("QPushButton {min-width:50px;min-height:25px}");
+    title->setStyleSheet("QLabel{font-size: 40px;}");
     hlayout->addLayout(vlayout);
     vlayout->addStretch();
     title->setAlignment(Qt::AlignCenter);
@@ -34,8 +35,12 @@ Login::Login(QWidget *parent):QWidget(parent){
     username->setPlaceholderText("用户名");
     password->setPlaceholderText("密码");
     password->setEchoMode(QLineEdit::Password);
+ 
+
     connect(loginBtn,&QPushButton::clicked,this,&Login::loginbtnClicked);
     connect(registerBtn,&QPushButton::clicked,this,&Login::gotoRegister);
+    connect(username,&QLineEdit::returnPressed,loginBtn,&QPushButton::click);
+    connect(password,&QLineEdit::returnPressed,loginBtn,&QPushButton::click);
 };
 
 void Login::loginbtnClicked(){

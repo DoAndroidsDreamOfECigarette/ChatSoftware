@@ -33,6 +33,9 @@ void socketHandler::run(){
             if(message_json["state"].toString()=="LOGIN_SUCCESS"){
                 int id=message_json["id"].toInt();
                 emit saveUser(id, this);
+                connect(m_socket,&QTcpSocket::disconnected,this,[=]{
+                    emit deleteUser(id, this);
+                });
             }
         }else if (message_json["type"].toString()=="REGISTER"){
             QString username=message_json["username"].toString();
@@ -49,6 +52,7 @@ void socketHandler::run(){
     connect(this,&socketHandler::sendMessage,this,[=](QString message){
         m_socket->write(message.toUtf8());
     });
+
 };
 
 socketHandler::~socketHandler(){};

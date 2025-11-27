@@ -6,7 +6,7 @@
 
 Register::Register(QWidget *parent) : QWidget(parent) { 
     resize(600,420);
-    this->setStyleSheet("QPushButton {min-width:50px;min-height:25px}");
+    title->setStyleSheet("QLabel{font-size: 40px;}");
     hlayout->addLayout(vlayout);
     vlayout->addStretch();
     title->setAlignment(Qt::AlignCenter);
@@ -31,6 +31,9 @@ Register::Register(QWidget *parent) : QWidget(parent) {
 
     connect(loginBtn,&QPushButton::clicked,this,&Register::gotoLogin);
     connect(registerBtn,&QPushButton::clicked,this,&Register::registerUser);
+    connect(username,&QLineEdit::returnPressed,registerBtn,&QPushButton::click);
+    connect(password,&QLineEdit::returnPressed,registerBtn,&QPushButton::click);
+    connect(passwordagin,&QLineEdit::returnPressed,registerBtn,&QPushButton::click);
 };
 
 Register::~Register(){};
