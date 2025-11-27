@@ -16,8 +16,8 @@ class SqliteHandler:public QObject{
     ~SqliteHandler();
 
     public slots:
-    void saveUserToFriedsList(int id,QString username);
-    void save_chat_record(QJsonObject chat_record);
+    bool saveUserToFriedsList(int id,QString username);
+    bool save_chat_record(QJsonObject chat_record);
     QList<QJsonObject> get_All_chat_record(int friend_id);
     QList<User> getAllFriends();
 

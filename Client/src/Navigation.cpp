@@ -2,6 +2,8 @@
 #include <QApplication>
 #include <QScreen>
 #include <QWindow>
+#include <qtmetamacros.h>
+#include <qwidget.h>
 
 Navigation::Navigation(QWidget *parent) : QWidget(parent)
 {
@@ -69,9 +71,12 @@ Navigation::Navigation(QWidget *parent) : QWidget(parent)
     );
     
     // 连接信号和槽
-    connect(minimizeButton, &QPushButton::clicked, this, &Navigation::minimizeClicked);
-    connect(closeButton, &QPushButton::clicked, this, [=]{
-        exit(0);
+    connect(minimizeButton, &QPushButton::clicked, this,[=]{
+        static_cast<QWidget*>(this->parent())->showMinimized();
+    });
+    connect(closeButton, &QPushButton::clicked, this, [&]{
+        static_cast<QWidget*>(this->parent())->close();
+        emit closeClicked();
     });
 }
 

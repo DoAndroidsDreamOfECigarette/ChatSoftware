@@ -57,6 +57,9 @@ Index::Index(GlassWindow *parent):GlassWindow(parent){
     connect(registerWindow, &Register::gotoLogin, this, &Index::gotoLogin);
     connect(registerWindow, &Register::registerApply, this, &Index::registerApply);
     connect(loginWindow, &Login::loginApply, this, &Index::loginApply);
+    connect(navigation,&Navigation::closeClicked,this,[=]{
+        exit(0);
+    });
 };
 
 Index::~Index(){};

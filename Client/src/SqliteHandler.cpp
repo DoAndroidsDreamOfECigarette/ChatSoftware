@@ -26,10 +26,12 @@ SqliteHandler::SqliteHandler(int id,QObject *parent):QObject(parent){
 
 SqliteHandler::~SqliteHandler(){};
 
-void SqliteHandler::saveUserToFriedsList(int id,QString username) { 
+bool SqliteHandler::saveUserToFriedsList(int id,QString username) { 
     if (!query.exec("INSERT INTO friendslist(id,username) VALUES('"+QString::number(id)+"','"+username+"')")) {
         spdlog::error("保存用户失败:"+query.lastError().text().toStdString());
+        return false;
     }
+    return true;
 };
 
 QList<User> SqliteHandler::getAllFriends(){
@@ -48,17 +50,20 @@ QList<User> SqliteHandler::getAllFriends(){
     return userList;
 };
 
-void SqliteHandler::save_chat_record(QJsonObject chat_record){
+bool SqliteHandler::save_chat_record(QJsonObject chat_record){
     int friend_id=chat_record["friend_id"].toInt();
     QString message=chat_record["message"].toString();
     QString time=chat_record["time"].toString();
     QString flag=chat_record["flag"].toString();
     if (!query.exec("CREATE TABLE IF NOT EXISTS chatrecord_"+QString::number(friend_id)+"(message TEXT,time varchar,flag varchar)")) {
         spdlog::error("创建表失败:"+query.lastError().text().toStdString());
+        return false;
     }
     if (!query.exec("INSERT INTO chatrecord_"+QString::number(friend_id)+"(message,time,flag) VALUES('"+message+"','"+time+"','"+flag+"')")) {
         spdlog::error("保存聊天记录失败:"+query.lastError().text().toStdString());
+        return false;
     }
+    return true;
 }
 
 QList<QJsonObject> SqliteHandler::get_All_chat_record(int friend_id){

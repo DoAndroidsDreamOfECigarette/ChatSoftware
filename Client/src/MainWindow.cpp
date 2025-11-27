@@ -3,6 +3,7 @@
 #include "Friend.h"
 #include "Friends.h"
 #include <combaseapi.h>
+#include <cstdlib>
 #include <qaction.h>
 #include <qapplication.h>
 #include <qboxlayout.h>
@@ -28,6 +29,7 @@
 #include <QToolButton>
 #include <winsock.h>
 #include "IP.h"
+#include "Navigation.h"
 #include "SearchFriends.h"
 
 MainWindow::MainWindow(User user,QFrame *parent):GlassWindow(parent),user(user){
@@ -91,6 +93,9 @@ MainWindow::MainWindow(User user,QFrame *parent):GlassWindow(parent),user(user){
         friends->addFriend(id,username);
     });
     connect(friends,&Friends::flashFriends,this,&MainWindow::initialFriends);
+    connect(navigation,&Navigation::closeClicked,this,[=]{
+        exit(0);
+    });
 };
 
 MainWindow* MainWindow::getInstance(User user){
