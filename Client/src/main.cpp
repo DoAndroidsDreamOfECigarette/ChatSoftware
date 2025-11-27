@@ -8,6 +8,7 @@
 #include <qimage.h>
 #include <qnamespace.h>
 #include <qobject.h>
+#include <qtabwidget.h>
 #include <spdlog/spdlog.h>
 
 int main(int argc, char *argv[])

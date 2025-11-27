@@ -7,7 +7,7 @@
 
 QByteArray MessageProtocol::create_Login_Message(QString username,QString password){
     QJsonObject login_Message;
-    login_Message["type"]="LOGIN";
+    login_Message["type"]=LOGIN;
     login_Message["username"]=username;
     login_Message["password"]=password;
     return Json2Byte(login_Message);
@@ -15,7 +15,7 @@ QByteArray MessageProtocol::create_Login_Message(QString username,QString passwo
 
 QByteArray MessageProtocol::create_Register_Message(QString username,QString password){
     QJsonObject register_Message;
-    register_Message["type"]="REGISTER";
+    register_Message["type"]=REGISTER;
     register_Message["username"]=username;
     register_Message["password"]=password;
     return Json2Byte(register_Message);
@@ -23,7 +23,7 @@ QByteArray MessageProtocol::create_Register_Message(QString username,QString pas
 
 QByteArray MessageProtocol::create_Search_Message(int id,QString username){
     QJsonObject search_Message;
-    search_Message["type"]="SEARCH";
+    search_Message["type"]=SEARCH;
     if (id!=-1) {
         search_Message["id"]=id;
     }
@@ -35,7 +35,7 @@ QByteArray MessageProtocol::create_Search_Message(int id,QString username){
 
 QByteArray MessageProtocol::create_Search_Back(int id, QString username, QString state){
     QJsonObject search_Back;
-    search_Back["type"]="SEARCH_BACK";
+    search_Back["type"]=SEARCH_BACK;
     search_Back["id"]=id;
     search_Back["username"]=username;
     search_Back["state"]=state;
@@ -44,7 +44,7 @@ QByteArray MessageProtocol::create_Search_Back(int id, QString username, QString
 
 QByteArray MessageProtocol::create_Send_Message(int receive_id,int send_id, QString Message){
     QJsonObject send_Message;
-    send_Message["type"]="SEND";
+    send_Message["type"]=SEND;
     send_Message["receive_id"]=receive_id;
     send_Message["send_id"]=send_id;
     send_Message["message"]=Message;
@@ -53,13 +53,21 @@ QByteArray MessageProtocol::create_Send_Message(int receive_id,int send_id, QStr
 
 QJsonObject MessageProtocol::create_LR_Back(QString state,QString describe,int id){
     QJsonObject lr_back;
-    lr_back["type"]="L/R_BACK";
+    lr_back["type"]=L_R_BACK;
     lr_back["state"]=state;
     lr_back["describe"]=describe;
     if (id!=-1) {
         lr_back["id"]=id;
     }
     return lr_back;
+}
+
+QByteArray MessageProtocol::create_friend_add_apply_Message(int id, QString username){
+    QJsonObject friend_add_apply_Message;
+    friend_add_apply_Message["type"]=FRIEND_ADD_APPLY;
+    friend_add_apply_Message["id"]=id;
+    friend_add_apply_Message["username"]=username;
+    return Json2Byte(friend_add_apply_Message);
 }
 
 QByteArray MessageProtocol::Json2Byte(QJsonObject j){

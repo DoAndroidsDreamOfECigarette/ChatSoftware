@@ -6,7 +6,6 @@
 #include <qtmetamacros.h>
 #include <qwidget.h>
 #include "GlassWindow.hpp"
-#include "Navigation.h"
 
 class SearchFriends:public GlassWindow{
     Q_OBJECT
@@ -27,8 +26,9 @@ class SearchFriends:public GlassWindow{
 
     signals:
     void searchFriend(QString searchText);
-    void addFriend(int id,QString username,QString text="");
+    void addFriend(int id,QString username);
 
     public slots:
     void showAllResult(QString username);
+    void show_all_friend_add_apply();
 };

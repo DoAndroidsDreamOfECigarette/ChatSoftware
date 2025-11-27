@@ -4,6 +4,7 @@
 #include <QFrame>
 #include <QPainter>
 #include <QPainterPath>
+#include <qwidget.h>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -11,11 +12,11 @@
 #pragma comment(lib, "dwmapi.lib")
 #endif
 
-class GlassWindow : public QFrame {
+class GlassWindow : public QWidget {
     Q_OBJECT
 public:
-    GlassWindow(QFrame* parent = nullptr)
-        : QFrame(parent),
+    GlassWindow(QWidget* parent = nullptr)
+        : QWidget(parent),
           cornerRadius(8),
           borderColor(255, 255, 255, 80)
     {
@@ -37,7 +38,7 @@ protected:
 
 
     void showEvent(QShowEvent* ev) override {
-        QFrame::showEvent(ev);
+        QWidget::showEvent(ev);
 
 #ifdef Q_OS_WIN
         enableWin11RoundCorners();
