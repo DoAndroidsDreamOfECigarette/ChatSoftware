@@ -18,6 +18,7 @@ class Friends:public QWidget{
     ~Friends();
     QString getSelectedFriendUsername();
     int getSelectedFriendId();
+    int friend_add_apply_count;
 
     QListWidgetItem* getSelectedFriend();
     QListWidgetItem* getFriendbyId(int id);

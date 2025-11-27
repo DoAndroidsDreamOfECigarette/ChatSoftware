@@ -1,5 +1,6 @@
 #pragma once
 #include "MessageProtocol.h"
+#include <qcontainerfwd.h>
 #include <qjsonobject.h>
 #include <qlist.h>
 #include <qobject.h>
@@ -18,8 +19,11 @@ class SqliteHandler:public QObject{
     public slots:
     bool saveUserToFriedsList(int id,QString username);
     bool save_chat_record(QJsonObject chat_record);
+    bool save_friend_add_apply(int id,QString username);
+    bool delete_friend_add_apply(int id);
     QList<QJsonObject> get_All_chat_record(int friend_id);
     QList<User> getAllFriends();
+    QList<User> get_all_friend_add_apply();
 
     private:
     QSqlDatabase db=QSqlDatabase::addDatabase("QSQLITE");

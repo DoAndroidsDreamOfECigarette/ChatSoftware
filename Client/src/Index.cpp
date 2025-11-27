@@ -11,13 +11,17 @@
 #include <qobject.h>
 #include <qstringview.h>
 #include <qtcpsocket.h>
+#include <qtmetamacros.h>
+#include <qwidget.h>
 #include <spdlog/spdlog.h>
 #include <winsock.h>
 #include "Toast.h"
-Index::Index(GlassWindow *parent):GlassWindow(parent){
+Index::Index(QWidget *parent):GlassWindow(parent){
     connect(timer, &QTimer::timeout,this,[=]{
-        Toast::showToast(this, "尝试连接服务器");
         socket->connectToHost(QHostAddress(IP),PORT);
+        connect(socket,&QTcpSocket::errorOccurred,this,[=]{
+            Toast::showToast(this, "尝试连接服务器");
+        });
         connect(socket,&QTcpSocket::connected,this,[=]{
             timer->stop();
         });
@@ -32,9 +36,10 @@ Index::Index(GlassWindow *parent):GlassWindow(parent){
     connect(socket, &QTcpSocket::readyRead, this,[=]{
         QString msg = socket->readAll();
         QJsonObject lr_back=MessageProtocol::Byte2Json(msg.toUtf8());
-        if (lr_back["type"].toString()=="L/R_BACK") {
+        if (lr_back["type"].toInt()==L_R_BACK) {
             if (lr_back["state"].toString()=="REGISTER_SUCCESS") {
-                QMessageBox::information(this, "注册成功", lr_back["describe"].toString());
+                Toast::showToast(this, lr_back["describe"].toString());
+                gotoLogin();
             }else if (lr_back["state"].toString()=="REGISTER_FAIL") {
                 QMessageBox::information(this, "注册失败", lr_back["describe"].toString());
             }else if (lr_back["state"].toString()=="LOGIN_SUCCESS") {

@@ -25,27 +25,39 @@ void socketHandler::run(){
         QJsonObject message_json=MessageProtocol::Byte2Json(message);
         QList<QByteArray> mes=message.split(':');
         spdlog::info(message.toStdString());
-        if(message_json["type"].toString()=="LOGIN"){
-            QString username=message_json["username"].toString();
-            QString password=message_json["password"].toString();
-            emit loginUser(username, password);
-        }else if (message_json["type"].toString()=="L/R_BACK") {
-            if(message_json["state"].toString()=="LOGIN_SUCCESS"){
+        int type=message_json["type"].toInt();
+        switch (type) {
+            case LOGIN:{
+                QString username=message_json["username"].toString();
+                QString password=message_json["password"].toString();
+                emit loginUser(username, password);
+                break;
+            }case L_R_BACK:{
+                if(message_json["state"].toString()=="LOGIN_SUCCESS"){
+                    int id=message_json["id"].toInt();
+                    emit saveUser(id, this);
+                    connect(m_socket,&QTcpSocket::disconnected,this,[=]{
+                        emit deleteUser(id, this);
+                    });
+                    break;
+                }
+            }case REGISTER:{
+                QString username=message_json["username"].toString();
+                QString password=message_json["password"].toString();
+                emit registerUser(username, password);
+                break;
+            }case SEARCH:{
                 int id=message_json["id"].toInt();
-                emit saveUser(id, this);
-                connect(m_socket,&QTcpSocket::disconnected,this,[=]{
-                    emit deleteUser(id, this);
-                });
+                emit getUsernameById(id);
+                break;
+            }case SEND:{
+                emit transmitMessage(message_json);
+                break;
+            }case FRIEND_ADD_APPLY:
+             case FRIEND_ADD_APPLY_BACK:{
+                emit transmitMessage(message_json);
+                break;
             }
-        }else if (message_json["type"].toString()=="REGISTER"){
-            QString username=message_json["username"].toString();
-            QString password=message_json["password"].toString();
-            emit registerUser(username, password);
-        }else if (message_json["type"].toString()=="SEARCH") {
-            int id=message_json["id"].toInt();
-            emit getUsernameById(id);
-        }else if(message_json["type"].toString()=="SEND"){
-            emit transmitMessage(message_json);
         }
     });
 

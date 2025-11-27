@@ -17,7 +17,7 @@ class Index:public GlassWindow{
     Q_OBJECT
 
     public:
-    Index(GlassWindow *parent=nullptr);
+    Index(QWidget *parent=nullptr);
     ~Index();
 
     private:

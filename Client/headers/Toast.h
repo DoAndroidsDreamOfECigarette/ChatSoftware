@@ -24,7 +24,7 @@ enum ToastType{
 class Toast : public QLabel
 {
 private:
-    QColor background = QColor(135, 206, 235);
+    QColor background = QColor(0, 0, 0);
 public:
     Toast(const ToastType &type,QWidget *parent = nullptr);
 

@@ -19,6 +19,7 @@
 #include <qwidget.h>
 #include <QListWidget>
 #include <QSplitter>
+#include "MainWindow.h"
 #include "SearchFriends.h"
 #include "SqliteHandler.h"
 #include "User.h"
@@ -28,6 +29,8 @@
 #include "GlassWindow.hpp"
 #include <QTimer>
 #include "Navigation.h"
+#include "FriendOption.h"
+#include "FriendAddApplyList.h"
 
 class MainWindow:public GlassWindow{
     Q_OBJECT
@@ -40,22 +43,26 @@ class MainWindow:public GlassWindow{
     int getUserId();
 
     private:
-    MainWindow(User user,QFrame *parent=nullptr);
+    MainWindow(User user,QWidget *parent=nullptr);
     ~MainWindow();
 
-    User user;
-    QList<User> userList;
     static MainWindow *Instance;
+
     QVBoxLayout *vlayout=new QVBoxLayout(this);
     QHBoxLayout *hlayout=new QHBoxLayout(this);
     QSplitter *splitter=new QSplitter(Qt::Horizontal,this);
     Friends *friends=new Friends(this);
     QStackedWidget *dialogstack=new QStackedWidget(this);
     QTcpSocket *m_socket=new QTcpSocket(this);
-    SearchFriends *searchFriends=new SearchFriends();
     QTimer *timer=new QTimer(this);
     Navigation *navigation=new Navigation(this);
+    FriendOption *friend_option=new FriendOption();
+    SearchFriends *searchFriends=new SearchFriends(friend_option);
+    FriendAddApplyList *friend_add_apply_list=new FriendAddApplyList(this);
     
+    
+    User user;
+    QList<User> userList;
     QHash<QListWidgetItem*,Dialog*> *dialogs=new QHash<QListWidgetItem*, Dialog*>();
     SqliteHandler *sqliteHandler=new SqliteHandler(user.id,this);
     
@@ -68,4 +75,6 @@ class MainWindow:public GlassWindow{
     void sendMessagetoServer(QString message);
     QList<QListWidgetItem*> initialFriends();
     void reconnect();
+    QList<User> get_all_friend_add_apply();
+    void flash_friend_add_apply();
 };
