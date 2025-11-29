@@ -1,5 +1,5 @@
 #pragma once
-#include "MessageProtocol.h"
+#include "MessageProtocol.hpp"
 #include <qcontainerfwd.h>
 #include <qjsonobject.h>
 #include <qlist.h>

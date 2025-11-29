@@ -19,7 +19,6 @@
 #include <qwidget.h>
 #include <QListWidget>
 #include <QSplitter>
-#include "MainWindow.h"
 #include "SearchFriends.h"
 #include "SqliteHandler.h"
 #include "User.h"

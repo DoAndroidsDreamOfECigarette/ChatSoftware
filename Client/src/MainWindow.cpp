@@ -31,7 +31,7 @@
 #include <winsock.h>
 #include "GlassWindow.hpp"
 #include "IP.h"
-#include "MessageProtocol.h"
+#include "MessageProtocol.hpp"
 #include "Navigation.h"
 #include "SearchFriends.h"
 #include "SqliteHandler.h"
@@ -112,7 +112,7 @@ MainWindow::MainWindow(User user,QWidget *parent):GlassWindow(parent),user(user)
     });
     connect(this,&MainWindow::showSearchResult,searchFriends,&SearchFriends::showAllResult);
     connect(searchFriends,&SearchFriends::addFriend,friends,[=](int id,QString username){
-        m_socket->write(MessageProtocol::create_friend_add_apply_Message(id, username));
+        m_socket->write(MessageProtocol::create_friend_add_apply_Message(id, username,this->getUserId(),this->getUsername()));
     });
     connect(friends,&Friends::flashFriends,this,&MainWindow::initialFriends);
     connect(navigation,&Navigation::closeClicked,this,[=]{
@@ -120,7 +120,7 @@ MainWindow::MainWindow(User user,QWidget *parent):GlassWindow(parent),user(user)
     });
     connect(friend_add_apply_list,&FriendAddApplyList::reject,sqliteHandler,&SqliteHandler::delete_friend_add_apply);
     connect(friend_add_apply_list,&FriendAddApplyList::accept,this,[=](int id,QString username,QString text){
-        m_socket->write(MessageProtocol::create_friend_add_apply_Back(id, username,"ACCEPT"));
+        m_socket->write(MessageProtocol::create_friend_add_apply_Back(id, username,"ACCEPT",this->getUserId(),this->getUsername()));
         sqliteHandler->saveUserToFriedsList(id,username);
         userList=sqliteHandler->getAllFriends();
         friends->addFriend(id, username);

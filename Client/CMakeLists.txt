@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Network Sql)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Network Sql HttpServer)
 find_package(spdlog CONFIG REQUIRED)
 
 qt_standard_project_setup()
@@ -22,7 +22,7 @@ qt_add_executable(Client
 )
 
 target_include_directories(Client PRIVATE headers ui resources resources/qss)
-target_link_libraries(Client PRIVATE spdlog::spdlog Qt6::Network Qt6::Sql)
+target_link_libraries(Client PRIVATE spdlog::spdlog Qt6::Network Qt6::Sql Qt6::HttpServer)
 
 set_target_properties(Client PROPERTIES AUTOUIC_SEARCH_PATHS "./ui")
 

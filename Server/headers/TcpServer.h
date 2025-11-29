@@ -1,6 +1,7 @@
 #pragma once
 #include "myTcpServer.h"
 #include <qhash.h>
+#include <qhttpserver.h>
 #include <qjsonobject.h>
 #include <qobject.h>
 #include <qtcpserver.h>
@@ -9,7 +10,9 @@
 #include <qrunnable.h>
 #include "socketHandler.h"
 #include "DatabaseHandler.h"
-#include "MessageProtocol.h"
+#include "MessageProtocol.hpp"
+#include <QHttpServer>
+#include <qtypes.h>
 
 #define PORT ((unsigned short)8899)
 
@@ -27,6 +30,9 @@ class TcpServer:public QObject{
     static TcpServer* instance;
     static QHash<int, socketHandler*> userList;
     DatabaseHandler* db=new DatabaseHandler(this);
+    QHttpServer *httpserver=new QHttpServer(this);
+    QTcpServer *h_s=new QTcpServer(this);
+
 
     private slots:
     void saveUser(int id,socketHandler *handler);

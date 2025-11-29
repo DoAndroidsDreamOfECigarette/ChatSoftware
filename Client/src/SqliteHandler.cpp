@@ -8,6 +8,7 @@
 #include <qsqldatabase.h>
 #include <QSqlError>
 #include <spdlog/spdlog.h>
+
 SqliteHandler::SqliteHandler(int id,QObject *parent):QObject(parent){
     this->id=id;
     if (QSqlDatabase::contains("qt_sql_default_connection")) {

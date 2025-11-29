@@ -2,7 +2,7 @@
 #include "Friend.h"
 #include "IP.h"
 #include "MainWindow.h"
-#include "MessageProtocol.h"
+#include "MessageProtocol.hpp"
 #include "TextArea.h"
 #include <qcolor.h>
 #include <qcontainerfwd.h>
